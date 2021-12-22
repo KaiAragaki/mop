@@ -1,0 +1,23 @@
+Package: mop
+Title: A 'broom'-like Interface to Lab Data
+Version: 0.0.0.9000
+Authors@R: 
+    person("Kai", "Aragaki", , "adamaragaki@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-9458-0426"))
+Description: What the package does (one paragraph).
+License: MIT + file LICENSE
+Encoding: UTF-8
+Language: en
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Imports: 
+    crayon,
+    dplyr,
+    lubridate,
+    readr,
+    rlang,
+    snakecase,
+    stringr,
+    utils,
+    vctrs
