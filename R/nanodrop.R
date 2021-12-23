@@ -161,8 +161,7 @@ validate_nanodrop_names <- function(x) {
                        "impurity_1_a260", "impurity_1_cv", "impurity_1_m_m",
                        "impurity_2", "impurity_2_a260", "impurity_2_cv",
                        "impurity_2_m_m", "impurity_3", "impurity_3_a260",
-                       "impurity_3_cv", "impurity_3_m_m", "tube_name",
-                       "cell_line", "experimental_condition")
+                       "impurity_3_cv", "impurity_3_m_m")
           )
     )
 

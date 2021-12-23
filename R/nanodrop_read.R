@@ -73,6 +73,8 @@ read_nanodrop <- function(path, nucleotide = NULL, date = NULL, date_order = NUL
 
   if (is.na(date)) date <- lubridate::Date(length = 1L)
 
+  date <- lubridate::as_date(date)
+
   data <- utils::read.delim(path, fileEncoding = readr::guess_encoding(path)$encoding[1]) |>
     dplyr::as_tibble() |>
     suppressWarnings() # These files often lack EOL characters. This squelches that error associated with that.

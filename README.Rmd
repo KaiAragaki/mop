@@ -18,10 +18,10 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-Data from lab instruments are often not tidy, but not tidy in a consistent way. Because of this, we can programmatically tidy them. This package seeks to tidy lab data much like how `broom` tidies statistical objects, with a couple important differences:
+Data from lab instruments are often consistently untidy, and can therefore be programmatically tidied. This package seeks to tidy lab data much like how `broom` tidies statistical objects, with a couple important differences:
 
   1. Each data type must be read in, and has its own `read_*` function. This can't really be avoided: there is really no practical way to provide a single function that can accurately and consistently determine the source of a given file.
-  2. Outputs from `tidy_lab` are *not* `data.frame`s. They are instead objects that *contain* tidy data. This allows for packages to interact with these downstream objects in unique ways depending on the data type (ie, making generic functions that utilize these objects). If you would prefer a tidy `data.frame` (or more specifically, `tibble`), either run `scrub` on the tidied object, or set `scrub = TRUE` in `tidy_lab`.
+  2. Outputs from `tidy_lab` are *not* `data.frame`s. They are instead objects that *contain* tidy data. This allows for packages to interact with these downstream objects in unique ways depending on the data type (ie, making generic functions that utilize these objects). If you would prefer a tidy `data.frame` (or more specifically, `tibble`), run `scrub` on the object.
 
 ## Installation
 
@@ -31,10 +31,42 @@ This package can be downloaded from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("KaiAragaki/mop")
 ```
-## Example
+## Basic Workflow
+
+Using `mop` generally begins with reading in your lab data with it's respective function. For example, a nanodrop file:
 
 ```{r example}
 library(mop)
-## basic example code
+
+nano <- system.file("extdata", "nanodrop.csv", package = "mop") |>
+  read_nanodrop(nucleotide = "RNA", date = "2021-08-14")
+
+nano
 ```
 
+Somethings to note:
+
+- `nano` is currently NOT tidy
+- `nano` is a `nanodrop` object
+
+Additionally, `read_nanodrop` will normally try to extract nucleotide and date information from the file name, but were supplied manually here as the file is named to be understandable.
+
+To tidy any lab object, pass it to `tidy_lab`:
+
+```{r}
+nano_tidy <- tidy_lab(nano)
+nano_tidy
+```
+Of note, our raw data is stored in `nano$raw_data`.
+
+The operations that make an object tidy vary per object class, and can be found in the object's documentation (here `?tidy_lab.nanodrop`).
+
+Objects are useful as they form a semi-stable language for other functions from this and other packages to operate on. However, it's often much simpler to interact with data in a flat `tibble`. This can be done using `scrub`:
+
+```{r}
+nano_scrub <- scrub(nano_tidy)
+
+nano_scrub[c(1:3, (ncol(nano_scrub)-2):ncol(nano_scrub))]
+```
+
+Note how meta-data fields have now become individual columns.

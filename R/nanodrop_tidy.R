@@ -39,19 +39,6 @@
 #'   * `a280` The absorbance at 280nm, the wavelength proteins absorb most
 #'   strongly.
 #'
-#'   * `tube_name` The label given the physical tube that contains sample
-#'
-#'   * `cell_line` The cell line from which the sample came, if applicable
-#'
-#'   * `experimental_condition` A brief description of the conditions these
-#'   samples were subject to for the experiment
-#'
-#'
-#'   `tube_name`, `cell_line`, and `experimental_condition` are always unfilled,
-#'   because these data are not within nanodrop data. However, they are provided
-#'   because they are included in the masterlist data, and it's wise to fill
-#'   them out for your records.
-#'
 #'   The remaining columns are typically unused.
 #'
 #' @importFrom rlang .data
@@ -73,10 +60,7 @@ tidy_lab.nanodrop <- function(x, force_tidy = FALSE, ...) {
     dplyr::rename_with(stringr::str_replace, .cols = dplyr::everything(), "_u_l", "ul") |>
     dplyr::rename_with(stringr::str_replace, .cols = dplyr::everything(), "a_260", "a260") |>
     dplyr::rename_with(stringr::str_replace, .cols = dplyr::everything(), "a_280", "a280") |>
-    dplyr::mutate(date = lubridate::mdy_hms(.data$date) |> as.character(),
-                  tube_name = "",
-                  cell_line = "",
-                  experimental_condition = "")
+    dplyr::mutate(date = lubridate::mdy_hms(.data$date) |> as.character())
 
   new_nanodrop(data = data, raw_data = x$data, nucleotide = x$nucleotide, is_tidy = TRUE, date = x$date)
 }

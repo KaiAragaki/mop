@@ -1,0 +1,24 @@
+template:
+  bootstrap: 5
+
+reference:
+- title: Generics
+  contents:
+  - tidy_lab
+  - scrub
+
+- title: Readers
+  contents:
+  - starts_with("read")
+
+- title: Tidiers
+  contents:
+  - starts_with("tidy")
+
+- title: Scrubbers
+  contents:
+  - starts_with("scrub")
+
+- title: Nanodrop
+  contents:
+  - matches("nanodrop")
