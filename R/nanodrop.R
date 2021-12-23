@@ -1,7 +1,7 @@
 #' Constructor for a nanodrop object
 #'
 #' As this is a low-level constructor, it will let you do some un-recommended
-#' things without warning. You have been warned.
+#' things without error. You have been warned.
 #'
 #' @param data `data.frame`, no restrictions on form.
 #' @param raw_data `data.frame`, no restrictions on form. Typically represents
@@ -20,8 +20,6 @@ new_nanodrop <- function(data = data.frame(), raw_data = data.frame(), date = lu
   vec_assert(date, lubridate::Date())
   vec_assert(nucleotide, character())
   vec_assert(is_tidy, logical())
-
-  meta <- list(date = date, nucleotide = nucleotide, is_tidy = is_tidy)
 
   new_vctr(list(data = I(data), raw_data = I(raw_data), date = date, nucleotide = nucleotide, is_tidy = is_tidy),
            class = "nanodrop")
@@ -78,7 +76,7 @@ new_nanodrop <- function(data = data.frame(), raw_data = data.frame(), date = lu
 #' @examples
 #'
 #' # Example A: colnames allowed when is_tidy = FALSE
-#' a <- system.file("extdata", "nanodrop.csv", package = "ragaki") |>
+#' a <- system.file("extdata", "nanodrop.csv", package = "mop") |>
 #' read_nanodrop()
 #'
 #' colnames(a$data)
@@ -124,80 +122,95 @@ nanodrop <- function(data,
     validate_nanodrop()
 }
 
-validate_nanodrop <- function(nanodrop) {
+validate_nanodrop <- function(x) {
 
-  lengths <- lapply(nanodrop, length)
-  names(lengths) <- names(nanodrop)
-  gr_one <- nanodrop[which(lengths > 1)]
+  # Each argument should have at most one value
+  validate_nanodrop_one_arg_one_val(x)
 
-  if(length(gr_one) > 0 & (!names(gr_one)[1] %in% c("data", "raw-data"))) {
-    culprit <- names(gr_one)[1]
-    culprit_amt <- lengths[[culprit]]
+  # Names of data, raw data include required names and not have names other than
+  # permitted names. The permitted/required names depend on the value of is_tidy
+  validate_nanodrop_names(x)
 
-    stop("All arguments must have only one value, but ", culprit, " has ", culprit_amt)
+  x
+}
+
+validate_nanodrop_one_arg_one_val <- function(x) {
+  meta <- list(date = x$date, nucleotide = x$nucleotide, is_tidy = x$is_tidy)
+
+  if(any(lengths(meta) > 1)) {
+
+    gr_one <- lengths(meta)[which(lengths(meta) > 1)]
+    first_culprit <- names(gr_one)[1]
+    first_culprit_amt <- gr_one[[1]]
+
+    rlang::abort(c("All arguments must have only one value.",
+                   x = paste("Argument", first_culprit, "has length", first_culprit_amt)))
   }
+}
 
-  # Validate names
+validate_nanodrop_names <- function(x) {
 
-  req_names_tidy <- c(
-    "date", "sample_name", "conc", "a260_280", "a260_230"
-  )
+  universal_req_names <- data.frame(name = c("date", "sample_name"))
 
-  allowed_names_tidy <- c(
-    "date", "sample_name", "conc", "a260_280", "a260_230", "a260",
-    "a280", "nucleic_acid_factor", "baseline_correction_nm", "baseline_absorbance",
-    "corregted_ngul", "corrected_cv", "impurity_1", "impurity_1_a260",
-    "impurity_1_cv", "impurity_1_m_m", "impurity_2", "impurity_2_a260",
-    "impurity_2_cv", "impurity_2_m_m", "impurity_3", "impurity_3_a260",
-    "impurity_3_cv", "impurity_3_m_m", "tube_name", "cell_line", "experimental_condition"
-  )
+  universal_allowed_names <-
+    rbind(universal_req_names,
+          data.frame(
+            name = c("a260", "a280", "nucleic_acid_factor",
+                       "baseline_correction_nm", "baseline_absorbance",
+                       "corrected_ngul", "corrected_cv", "impurity_1",
+                       "impurity_1_a260", "impurity_1_cv", "impurity_1_m_m",
+                       "impurity_2", "impurity_2_a260", "impurity_2_cv",
+                       "impurity_2_m_m", "impurity_3", "impurity_3_a260",
+                       "impurity_3_cv", "impurity_3_m_m", "tube_name",
+                       "cell_line", "experimental_condition")
+          )
+    )
 
-  req_names_untidy <- data.frame(common_names = c(
-    "date", "samplename", "nucleicacidngul", "a260a280", "a260a230"
-  ))
+  tidy_req_names <- rbind(universal_req_names,
+                          data.frame(name = c("conc", "a260_280", "a260_230")))
 
-  allowed_names_untidy <- data.frame(common_names = c(
-    "date", "samplename", "nucleicacidngul", "a260a280", "a260a230", "a260",
-    "a280", "nucleicacidfactor", "baselinecorrectionnm", "baselineabsorbance",
-    "correctedngul", "correctedcv", "impurity1", "impurity1a260",
-    "impurity1cv", "impurity1mm", "impurity2", "impurity2a260",
-    "impurity2cv", "impurity2mm", "impurity3", "impurity3a260",
-    "impurity3cv", "impurity3mm", "tubename", "cellline", "experimentalcondition"
-  ))
+  tidy_allowed_names <- rbind(tidy_req_names, universal_allowed_names)
 
-  if (nanodrop$is_tidy) {
+  untidy_req_names <-
+    rbind(universal_req_names,
+          data.frame(name = c("nucleicacidngul", "a260a280", "a260a230"))) |>
+    dplyr::mutate(name = stringr::str_remove_all(name, "_"))
 
-    missing_req_names <- setdiff(req_names_tidy, colnames(nanodrop$data))
+  untidy_allowed_names <-
+    rbind(untidy_req_names, universal_allowed_names) |>
+    dplyr::mutate(name = stringr::str_remove_all(name, "_"))
 
-    if (length(missing_req_names) > 0) {
-      rlang::abort(c("Data is missing required column(s)",
-                     i = paste("Data should have columns named", paste(missing_req_names, collapse = ", "))))
-    }
+  og_names <- colnames(x$data)
 
-    nanodrop$data <- dplyr::select(nanodrop$data, dplyr::matches(allowed_names_tidy))
-
+  if (x$is_tidy) {
+    req_names <- tidy_req_names
+    allowed_names <- tidy_allowed_names
+    names_df <- data.frame(og_name = og_names,
+                          name = og_names)
   } else {
-
-    common_names <- colnames(nanodrop$data) |> stringr::str_remove_all("[^[:alnum:]]") |> tolower()
-
-    names_df <- data.frame(og_names = colnames(nanodrop$data), common_names = common_names)
-
-    req_names_untidy <- data.frame(common_names = req_names_untidy)
-
-    missing_req_names <- dplyr::anti_join(req_names_untidy, names_df, by = "common_names")
-
-    if (nrow(missing_req_names) > 0) {
-      stop("data should have a column named ", paste(missing_req_names$common_names, collapse = ", "))
-    }
-
-    allowed <- dplyr::semi_join(names_df, allowed_names_untidy, by = "common_names")
-
-    nanodrop$data <- dplyr::select(nanodrop$data, dplyr::matches(allowed$og_names))
-
+    req_names <- untidy_req_names
+    allowed_names <- untidy_allowed_names
+    common_names <- og_names |> stringr::str_remove_all("[^[:alnum:]]") |> tolower()
+    names_df <- data.frame(og_name = og_names,
+                           name = common_names)
   }
 
+  missing_req_names <- dplyr::anti_join(req_names, names_df, by = "name")
 
-  nanodrop
+  if (nrow(missing_req_names) > 0) {
+    rlang::abort(c("Data is missing required column(s)",
+                   x = paste("Data should have columns named", paste(missing_req_names$name, collapse = ", "))))
+  }
+
+  disallowed_names <- dplyr::anti_join(names_df, allowed_names, by = "name")
+
+  if (nrow(disallowed_names) > 0) {
+    rlang::warn(c("Unexpected columns are being dropped",
+                  i = paste("Dropping:", paste(disallowed_names$og_name, collapse = ", "))))
+    x$data <- dplyr::select(x$data, -disallowed_names$og_name)
+  }
+
+  x
 }
 
 #' @export
@@ -246,20 +259,19 @@ as_nanodrop <- function(x, ...) {
 #' @export
 as_nanodrop.data.frame <- function(x, nucleotide = NULL, is_tidy = FALSE, date = NULL, ...) {
 
+  stopifnot(is.data.frame(x))
+  stopifnot(is.logical(is_tidy))
 
-  nucleotide <- if
-
-  date <- lubridate::as_date(date, )
+  date <- lubridate::as_date(date)
 
   date <- if (is.null(date)) lubridate::Date() else date
-
-
 
   x <- dplyr::as_tibble(x)
 
   raw_data <- if (is_tidy) data.frame() else x
 
-  new_nanodrop(data = x, raw_data = raw_data, nucleotide = nucleotide, is_tidy = is_tidy, date = date) |>
+  new_nanodrop(data = x, raw_data = raw_data, nucleotide = nucleotide,
+               is_tidy = is_tidy, date = date) |>
     validate_nanodrop()
 }
 

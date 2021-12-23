@@ -71,7 +71,7 @@ If there are additional columns provided, they will be silently dropped.
 \examples{
 
 # Example A: colnames allowed when is_tidy = FALSE
-a <- system.file("extdata", "nanodrop.csv", package = "ragaki") |>
+a <- system.file("extdata", "nanodrop.csv", package = "mop") |>
 read_nanodrop()
 
 colnames(a$data)

@@ -32,7 +32,7 @@ This function expects a file that has not been tampered with from
 the nanodrop machine itself, aside for the name.
 
 This function calls \code{read.delim} and guesses its encoding (usually
-\verb{UTF-16LE}, unless it's been reexported). It's less mysterious than reading
+\verb{UTF-16LE}, unless it's been re-exported). It's less mysterious than reading
 in an apparent \code{.csv} with \code{read.delim}, and it keeps you from having to
 remember the encoding (which R often fails to auto-detect). When possible,
 it attempts to extract the nucleotide type from the path provided.

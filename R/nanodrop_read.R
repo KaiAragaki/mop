@@ -17,7 +17,7 @@
 #'   the nanodrop machine itself, aside for the name.
 #'
 #'   This function calls `read.delim` and guesses its encoding (usually
-#'   `UTF-16LE`, unless it's been reexported). It's less mysterious than reading
+#'   `UTF-16LE`, unless it's been re-exported). It's less mysterious than reading
 #'   in an apparent `.csv` with `read.delim`, and it keeps you from having to
 #'   remember the encoding (which R often fails to auto-detect). When possible,
 #'   it attempts to extract the nucleotide type from the path provided.
@@ -38,9 +38,8 @@ read_nanodrop <- function(path, nucleotide = NULL, date = NULL, date_order = NUL
 
   if (is.null(nucleotide)) {
     nucleotide <- stringr::str_extract(fs::path_file(path), "(ds)?[D|R]NA")
+    if (is.na(nucleotide)) nucleotide <- character(length = 1L)
   }
-
-  if (is.na(nucleotide)) nucleotide <- NULL
 
   if (is.null(date) && is.null(date_order)) {
 
@@ -72,12 +71,12 @@ read_nanodrop <- function(path, nucleotide = NULL, date = NULL, date_order = NUL
     }
   }
 
-  if (is.na(date)) date <- NULL
+  if (is.na(date)) date <- lubridate::Date(length = 1L)
 
   data <- utils::read.delim(path, fileEncoding = readr::guess_encoding(path)$encoding[1]) |>
     dplyr::as_tibble() |>
     suppressWarnings() # These files often lack EOL characters. This squelches that error associated with that.
 
-  nanodrop(data = data, nucleotide = nucleotide, is_tidy = FALSE, date = date) |>
+  new_nanodrop(data = data, raw_data = data, nucleotide = nucleotide, is_tidy = FALSE, date = date) |>
     validate_nanodrop()
 }

@@ -1,4 +1,3 @@
-
 #' Tidy a nanodrop object
 #'
 #' @param x A `nanodrop` object to tidy

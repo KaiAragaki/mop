@@ -15,9 +15,13 @@ new_nanodrop(
 \arguments{
 \item{data}{\code{data.frame}, no restrictions on form.}
 
+\item{raw_data}{\code{data.frame}, no restrictions on form. Typically represents
+read-in data with no changes to it.}
+
 \item{date}{\code{lubridate::Date} object}
 
-\item{nucleotide}{\code{character}. Should likely be DNA, RNA, dsDNA, or even dsRNA.}
+\item{nucleotide}{\code{character}. Should likely be DNA, RNA, dsDNA, or even
+dsRNA.}
 
 \item{is_tidy}{\code{logical}. Is the \code{data.frame} provided tidy?}
 }
@@ -25,6 +29,6 @@ new_nanodrop(
 a \code{nanodrop} object
 }
 \description{
-As this is a low-level constructor, it will let you do some un-recommended things
-without warning. You have been warned.
+As this is a low-level constructor, it will let you do some un-recommended
+things without error. You have been warned.
 }

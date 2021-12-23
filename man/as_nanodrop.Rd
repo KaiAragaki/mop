@@ -7,7 +7,7 @@
 \usage{
 as_nanodrop(x, ...)
 
-\method{as_nanodrop}{data.frame}(x, nucleotide = NULL, is_tidy = NULL, date = NULL, ...)
+\method{as_nanodrop}{data.frame}(x, nucleotide = NULL, is_tidy = FALSE, date = NULL, ...)
 }
 \arguments{
 \item{x}{a \code{data.frame}}
