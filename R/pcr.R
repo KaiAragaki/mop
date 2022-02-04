@@ -31,6 +31,12 @@ new_pcr <- function(data = data.frame(), raw_data = data.frame(), header = data.
                 experiment_type = experiment_type, is_tidy = is_tidy),
            class = "pcr")
 }
+
+pcr <- function() {
+
+}
+
+
 #' @export
 obj_print_data.pcr <- function(x, ...) {
   print(x$data)
@@ -51,3 +57,4 @@ obj_print_footer.pcr <- function(x, ...) {
   cat(crayon::silver("# Date:"),
       ifelse(!is.null(x$date), as.character(x$date), "NULL"),
       "\n")
+}
