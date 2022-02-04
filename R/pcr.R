@@ -31,3 +31,23 @@ new_pcr <- function(data = data.frame(), raw_data = data.frame(), header = data.
                 experiment_type = experiment_type, is_tidy = is_tidy),
            class = "pcr")
 }
+#' @export
+obj_print_data.pcr <- function(x, ...) {
+  print(x$data)
+}
+
+#' @export
+obj_print_footer.pcr <- function(x, ...) {
+  cat(crayon::silver("# Experiment type:"),
+      ifelse(!is.null(x$experiment_type), x$experiment_type, "NULL"),
+      "\n")
+
+  cat(crayon::silver("# Is tidy:"),
+      dplyr::case_when(is.null(x$is_tidy) ~ crayon::silver("NULL"),
+                       x$is_tidy == TRUE ~ crayon::blue(x$is_tidy),
+                       x$is_tidy == FALSE ~ crayon::red(x$is_tidy)),
+      "\n")
+
+  cat(crayon::silver("# Date:"),
+      ifelse(!is.null(x$date), as.character(x$date), "NULL"),
+      "\n")
