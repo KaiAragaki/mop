@@ -43,7 +43,7 @@ tidy_lab.pcr <- function(x, force_tidy = FALSE, usr_standards = NULL, pad_zero =
 
     usr_standards <- usr_standards |>
       tibble::enframe(name = "name", value = "usr_quantity") |>
-      dplyr::mutate(name = paste("Standard", seq_len(usr_standards))) |>
+      dplyr::mutate(name = paste("Standard", seq_len(length(usr_standards)))) |>
       dplyr::arrange(usr_quantity)
 
     if (nrow(usr_standards) > length(standards)) {
