@@ -27,7 +27,8 @@ tidy_lab.pcr <- function(x, force_tidy = FALSE, usr_standards = NULL, pad_zero =
   x$data <- x$data |>
     dplyr::mutate(well_row = stringr::str_extract(.data$well_position, "^.{1}"),
                   well_col = as.numeric(stringr::str_extract(.data$well_position, "[:digit:]{1,2}$")),
-                  well_row = as.numeric(factor(.data$well_row, levels = LETTERS)))
+                  well_row = as.numeric(factor(.data$well_row, levels = LETTERS))) |>
+    dplyr::relocate(well_row, well_col)
 
   if (x$experiment_type == "standard_curve") {
 
