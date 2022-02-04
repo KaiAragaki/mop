@@ -1,4 +1,17 @@
-tidy_lab.pcr <- function(x, force_tidy = FALSE, ...) {
+#' Tidy a PCR object
+#'
+#' @param x a `pcr` object
+#' @param force_tidy `logical`. Should the tidying take place, even if the
+#'   `is_tidy` attribute is `TRUE`?
+#' @param usr_standards Custom supplied standards
+#' @param pad_zero Should, say, Sample 1 become Sample 01?
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
+tidy_lab.pcr <- function(x, force_tidy = FALSE, usr_standards = NULL, pad_zero = FALSE, ...) {
 
   colnames(x$data) <- snakecase::to_snake_case(colnames(x$data))
 
@@ -70,7 +83,7 @@ tidy_lab.pcr <- function(x, force_tidy = FALSE, ...) {
 
 
   if (pad_zero) {
-    dat$sample_name <- pad_zero(dat$sample_name)
+    x$data$sample_name <- pad_zero(x$data$sample_name)
   }
 
   dat$plate_type <- colnames(dat_og)[2]
