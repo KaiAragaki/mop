@@ -66,28 +66,25 @@ tidy_lab.pcr <- function(x, force_tidy = FALSE, usr_standards = NULL, pad_zero =
                      task = "STANDARD") |>
       dplyr::bind_cols(usr_standards)
 
-    dat <- dplyr::left_join(dat, final, by = c("task", "quantity")) |>
+    x$data <- dplyr::left_join(x$data, final, by = c("task", "quantity")) |>
       dplyr::mutate(sample_name = ifelse(is.na(sample_name), name, sample_name))
 
-    dropping <- dat |>
+    dropping <- x$data |>
       dplyr::filter(is.na(sample_name) & task == "STANDARD")
 
     if (nrow(dropping) > 0) {
-      dat <- dat |>
+      x$data <- x$data |>
         dplyr::filter(!is.na(sample_name) | task != "STANDARD")
       message(nrow(dropping), " rows of standards did not have a matching value in 'standards' and have been dropped")
-      dat <- pcr_calc_slope(dat)
+      x$data <- pcr_calc_slope(x$data)
     }
-
   }
-
 
   if (pad_zero) {
     x$data$sample_name <- pad_zero(x$data$sample_name)
   }
 
-  dat$plate_type <- colnames(dat_og)[2]
 
-  dat
+  x
 
 }
