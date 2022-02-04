@@ -84,6 +84,7 @@ tidy_lab.pcr <- function(x, force_tidy = FALSE, usr_standards = NULL, pad_zero =
     x$data$sample_name <- pad_zero(x$data$sample_name)
   }
 
+  x$is_tidy <- TRUE
 
   x
 
