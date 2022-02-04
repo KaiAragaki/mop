@@ -1,7 +1,7 @@
 read_pcr <- function(path, pad_zero = FALSE, usr_standards = NULL) {
 
   # .name_repair argument silences the renaming business
-  raw_data <- readxl::read_excel(path = path, sheet = "Results", col_names = FALSE,
+  raw_data <- readxl::read_excel(path = path.expand(path), sheet = "Results", col_names = FALSE,
                                .name_repair = ~ vctrs::vec_as_names(..., repair = "unique", quiet = TRUE))
 
   breaks <- which(is.na(raw_data[,1]))
