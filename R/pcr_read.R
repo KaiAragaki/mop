@@ -42,6 +42,10 @@ read_pcr <- function(path, pad_zero = FALSE, usr_standards = NULL) {
 
   experiment_type <- header[which(header$name == "Experiment Type"), 2][[1]]
 
+  wells <- header[which(header$name == "Block Type"), 2][[1]] |>
+    stringr::str_extract("[^[:space:]|\b]*(?=-Well)") |>
+    as.integer()
+
   new_pcr(data = body, raw_data = raw_data, header = header, footer = footer,
-          date = date, experiment_type = experiment_type, is_tidy = FALSE)
+          date = date, wells = wells, experiment_type = experiment_type, is_tidy = FALSE)
 }

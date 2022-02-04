@@ -17,18 +17,19 @@
 #' @examples
 new_pcr <- function(data = data.frame(), raw_data = data.frame(), header = data.frame(),
                     footer = data.frame(), date = lubridate::Date(),
-                    experiment_type = character(), is_tidy = logical()) {
+                    experiment_type = character(), wells = integer(), is_tidy = logical()) {
   stopifnot(is.data.frame(data),
             is.data.frame(raw_data),
             is.data.frame(header),
             is.data.frame(footer))
   vec_assert(date, lubridate::Date())
   vec_assert(experiment_type, character())
+  vec_assert(wells, integer())
   vec_assert(is_tidy, logical())
 
   new_vctr(list(data = I(data), raw_data = I(raw_data), header = I(header),
                 footer = I(footer), date = date,
-                experiment_type = experiment_type, is_tidy = is_tidy),
+                experiment_type = experiment_type, wells = wells, is_tidy = is_tidy),
            class = "pcr")
 }
 
@@ -46,6 +47,10 @@ obj_print_data.pcr <- function(x, ...) {
 obj_print_footer.pcr <- function(x, ...) {
   cat(crayon::silver("# Experiment type:"),
       ifelse(!is.null(x$experiment_type), x$experiment_type, "NULL"),
+      "\n")
+
+  cat(crayon::silver("# Wells:"),
+      ifelse(!is.null(x$wells), x$wells, "NULL"),
       "\n")
 
   cat(crayon::silver("# Is tidy:"),
