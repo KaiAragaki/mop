@@ -8,6 +8,13 @@
 \description{
 What the package does (one paragraph).
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://kaiaragaki.github.io/mop/}
+}
+
+}
 \author{
 \strong{Maintainer}: Kai Aragaki \email{adamaragaki@gmail.com} (\href{https://orcid.org/0000-0002-9458-0426}{ORCID})
 

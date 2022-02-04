@@ -44,16 +44,7 @@ around 2.
 strongly.
 \item \code{a280} The absorbance at 280nm, the wavelength proteins absorb most
 strongly.
-\item \code{tube_name} The label given the physical tube that contains sample
-\item \code{cell_line} The cell line from which the sample came, if applicable
-\item \code{experimental_condition} A brief description of the conditions these
-samples were subject to for the experiment
 }
-
-\code{tube_name}, \code{cell_line}, and \code{experimental_condition} are always unfilled,
-because these data are not within nanodrop data. However, they are provided
-because they are included in the masterlist data, and it's wise to fill
-them out for your records.
 
 The remaining columns are typically unused.
 }
