@@ -11,6 +11,7 @@ new_pcr(
   footer = data.frame(),
   date = lubridate::Date(),
   experiment_type = character(),
+  wells = integer(),
   is_tidy = logical()
 )
 }

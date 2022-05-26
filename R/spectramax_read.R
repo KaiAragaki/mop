@@ -1,4 +1,4 @@
-spectramax_read <- function(path) {
+spectramax_read <- function(path, date = Sys.Date(), experiment_type = c("pq", "mtt")) {
 
   if (fs::path_ext(path) == "xls" | fs::path_ext(path) == "xlsx") {
     x <- readxl::read_excel(path) |>
@@ -36,10 +36,11 @@ spectramax_read <- function(path) {
 
     x <-
       tibble::tibble(out, types) |>
-      dplyr::mutate(clean = purrr::map2(out, types, spectramax_tidy))
+      dplyr::mutate(clean = purrr::map2(out, types, spectramax_tidy)) |>
+      dplyr::select(type = types, data = clean)
   }
 
-  x
+  new_spectramax(data = x, raw_data = readr::read_file_raw(path), date = Sys.Date(), experiment_type = experiment_type, is_tidy = TRUE)
 }
 
 spectramax_tidy <- function(data, type) {
