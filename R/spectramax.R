@@ -1,6 +1,6 @@
 #' Constructor for a spectramax object
 #'
-#' @param data a list of `data.frame`s, no restrictions on form.
+#' @param data a `data.frame`, no restrictions on form.
 #' @param raw_data `raw`. Typically represents read-in data with no changes to it.
 #' @param date `lubridate::Date` object
 #' @param experiment_type `character`, no restrictions on form
@@ -8,9 +8,9 @@
 #'
 #' @return a `spectramax` object
 #' @export
-new_spectramax <- function(data = list(), raw_data = raw(), date = lubridate::Date(),
+new_spectramax <- function(data = data.frame(), raw_data = raw(), date = lubridate::Date(),
                            experiment_type = character(), is_tidy = logical()) {
-  stopifnot(is.list(data),
+  stopifnot(is.data.frame(data),
             is.raw(raw_data))
   vec_assert(date, lubridate::Date())
   vec_assert(experiment_type, character())

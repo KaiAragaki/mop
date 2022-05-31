@@ -5,7 +5,7 @@
 \title{Constructor for a spectramax object}
 \usage{
 new_spectramax(
-  data = list(),
+  data = data.frame(),
   raw_data = raw(),
   date = lubridate::Date(),
   experiment_type = character(),
@@ -13,7 +13,7 @@ new_spectramax(
 )
 }
 \arguments{
-\item{data}{a list of \code{data.frame}s, no restrictions on form.}
+\item{data}{a \code{data.frame}, no restrictions on form.}
 
 \item{raw_data}{\code{raw}. Typically represents read-in data with no changes to it.}
 

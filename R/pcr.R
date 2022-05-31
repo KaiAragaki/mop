@@ -11,10 +11,8 @@
 #' @param footer `data.frame`, the lower portion of the data after the body of
 #'   the data. Usually contains analysis information. May not exist.
 #'
-#' @return
+#' @return A `pcr` object
 #' @export
-#'
-#' @examples
 new_pcr <- function(data = data.frame(), raw_data = data.frame(), header = data.frame(),
                     footer = data.frame(), date = lubridate::Date(),
                     experiment_type = character(), wells = integer(), is_tidy = logical()) {

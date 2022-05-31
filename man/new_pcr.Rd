@@ -34,7 +34,7 @@ the data. Usually contains analysis information. May not exist.}
 \item{is_tidy}{\code{logical}. Is the \code{data.frame} provided tidy?}
 }
 \value{
-
+A \code{pcr} object
 }
 \description{
 Constructor for a pcr object

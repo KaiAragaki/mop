@@ -9,8 +9,6 @@
 #'
 #' @return
 #' @export
-#'
-#' @examples
 tidy_lab.pcr <- function(x, force_tidy = FALSE, usr_standards = NULL, pad_zero = FALSE, ...) {
 
   colnames(x$data) <- snakecase::to_snake_case(colnames(x$data))
