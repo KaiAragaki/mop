@@ -6,7 +6,7 @@
 \usage{
 new_pcr(
   data = data.frame(),
-  raw_data = data.frame(),
+  raw_data = raw(),
   header = data.frame(),
   footer = data.frame(),
   date = lubridate::Date(),
@@ -18,8 +18,7 @@ new_pcr(
 \arguments{
 \item{data}{\code{data.frame}, no restrictions on form.}
 
-\item{raw_data}{\code{data.frame}, no restrictions on form. Typically represents
-read-in data with no changes to it.}
+\item{raw_data}{\code{raw}, read in from the provided file with \code{readr::read_file_raw()}}
 
 \item{header}{\code{data.frame}, the upper portion of the data before the body of
 the data. Usually contains run information.}

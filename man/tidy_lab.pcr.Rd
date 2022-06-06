@@ -4,22 +4,16 @@
 \alias{tidy_lab.pcr}
 \title{Tidy a PCR object}
 \usage{
-\method{tidy_lab}{pcr}(x, force_tidy = FALSE, usr_standards = NULL, pad_zero = FALSE, ...)
+\method{tidy_lab}{pcr}(x, usr_standards = NULL, pad_zero = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{pcr} object}
-
-\item{force_tidy}{\code{logical}. Should the tidying take place, even if the
-\code{is_tidy} attribute is \code{TRUE}?}
 
 \item{usr_standards}{Custom supplied standards}
 
 \item{pad_zero}{Should, say, Sample 1 become Sample 01?}
 
 \item{...}{}
-}
-\value{
-
 }
 \description{
 Tidy a PCR object

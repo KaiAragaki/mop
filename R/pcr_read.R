@@ -1,8 +1,20 @@
-read_pcr <- function(path, pad_zero = FALSE, usr_standards = NULL) {
+#' Read in a QuantStudio pcr file
+#'
+#' @param path path to a QuantStudio .xls
+#'
+#' @return a `pcr` object
+#' @export
+read_pcr <- function(path) {
 
   # .name_repair argument silences the renaming business
-  raw_data <- readxl::read_excel(path = path.expand(path), sheet = "Results", col_names = FALSE,
-                               .name_repair = ~ vctrs::vec_as_names(..., repair = "unique", quiet = TRUE))
+  raw_data <-
+    readxl::read_excel(
+      path = path.expand(path),
+      sheet = "Results",
+      col_names = FALSE,
+      col_types = "guess",
+      .name_repair = ~ vctrs::vec_as_names(..., repair = "unique", quiet = TRUE)
+    )
 
   breaks <- which(is.na(raw_data[,1]))
   stopifnot(length(breaks) %in% 1:2)
@@ -46,6 +58,15 @@ read_pcr <- function(path, pad_zero = FALSE, usr_standards = NULL) {
     stringr::str_extract("[^[:space:]|\b]*(?=-Well)") |>
     as.integer()
 
-  new_pcr(data = body, raw_data = raw_data, header = header, footer = footer,
-          date = date, wells = wells, experiment_type = experiment_type, is_tidy = FALSE)
+  new_pcr(
+    data = body,
+    raw_data = readr::read_file_raw(path),
+    header = header,
+    footer = footer,
+    date = date,
+    wells = wells,
+    experiment_type = experiment_type,
+    is_tidy = FALSE
+  )
 }
+

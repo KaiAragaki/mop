@@ -1,8 +1,7 @@
 #' Constructor for a pcr object
 #'
 #' @param data `data.frame`, no restrictions on form.
-#' @param raw_data `data.frame`, no restrictions on form. Typically represents
-#'   read-in data with no changes to it.
+#' @param raw_data `raw`, read in from the provided file with `readr::read_file_raw()`
 #' @param date `lubridate::Date` object
 #' @param experiment_type `character`. Could
 #' @param is_tidy `logical`. Is the `data.frame` provided tidy?
@@ -13,11 +12,11 @@
 #'
 #' @return A `pcr` object
 #' @export
-new_pcr <- function(data = data.frame(), raw_data = data.frame(), header = data.frame(),
+new_pcr <- function(data = data.frame(), raw_data = raw(), header = data.frame(),
                     footer = data.frame(), date = lubridate::Date(),
                     experiment_type = character(), wells = integer(), is_tidy = logical()) {
   stopifnot(is.data.frame(data),
-            is.data.frame(raw_data),
+            is.raw(raw_data),
             is.data.frame(header),
             is.data.frame(footer))
   vec_assert(date, lubridate::Date())
@@ -25,7 +24,7 @@ new_pcr <- function(data = data.frame(), raw_data = data.frame(), header = data.
   vec_assert(wells, integer())
   vec_assert(is_tidy, logical())
 
-  new_vctr(list(data = I(data), raw_data = I(raw_data), header = I(header),
+  new_vctr(list(data = I(data), raw_data = raw_data, header = I(header),
                 footer = I(footer), date = date,
                 experiment_type = experiment_type, wells = wells, is_tidy = is_tidy),
            class = "pcr")

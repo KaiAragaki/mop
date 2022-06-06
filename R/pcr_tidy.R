@@ -1,15 +1,13 @@
 #' Tidy a PCR object
 #'
 #' @param x a `pcr` object
-#' @param force_tidy `logical`. Should the tidying take place, even if the
-#'   `is_tidy` attribute is `TRUE`?
 #' @param usr_standards Custom supplied standards
 #' @param pad_zero Should, say, Sample 1 become Sample 01?
 #' @param ...
 #'
 #' @return
 #' @export
-tidy_lab.pcr <- function(x, force_tidy = FALSE, usr_standards = NULL, pad_zero = FALSE, ...) {
+tidy_lab.pcr <- function(x, usr_standards = NULL, pad_zero = FALSE, ...) {
 
   colnames(x$data) <- snakecase::to_snake_case(colnames(x$data))
 
@@ -25,7 +23,8 @@ tidy_lab.pcr <- function(x, force_tidy = FALSE, usr_standards = NULL, pad_zero =
   x$data <- x$data |>
     dplyr::mutate(well_row = stringr::str_extract(.data$well_position, "^.{1}"),
                   well_col = as.numeric(stringr::str_extract(.data$well_position, "[:digit:]{1,2}$")),
-                  well_row = as.numeric(factor(.data$well_row, levels = LETTERS))) |>
+                  well_row = as.numeric(factor(.data$well_row, levels = LETTERS)),
+                  ct = as.numeric(ct) |> suppressWarnings()) |>
     dplyr::relocate(well_row, well_col)
 
   if (x$experiment_type == "standard_curve") {
