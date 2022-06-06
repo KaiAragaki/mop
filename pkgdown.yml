@@ -1,8 +1,8 @@
 pandoc: 2.7.3
-pkgdown: 2.0.1
+pkgdown: 2.0.3
 pkgdown_sha: ~
 articles: {}
-last_built: 2021-12-23T22:12Z
+last_built: 2022-06-06T18:51Z
 urls:
   reference: https://kaiaragaki.github.io/mop/reference
   article: https://kaiaragaki.github.io/mop/articles

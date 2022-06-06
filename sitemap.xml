@@ -34,7 +34,22 @@
     <loc>https://kaiaragaki.github.io/mop/reference/new_nanodrop.html</loc>
   </url>
   <url>
+    <loc>https://kaiaragaki.github.io/mop/reference/new_pcr.html</loc>
+  </url>
+  <url>
+    <loc>https://kaiaragaki.github.io/mop/reference/new_spectramax.html</loc>
+  </url>
+  <url>
+    <loc>https://kaiaragaki.github.io/mop/reference/pad_zero.html</loc>
+  </url>
+  <url>
     <loc>https://kaiaragaki.github.io/mop/reference/read_nanodrop.html</loc>
+  </url>
+  <url>
+    <loc>https://kaiaragaki.github.io/mop/reference/read_pcr.html</loc>
+  </url>
+  <url>
+    <loc>https://kaiaragaki.github.io/mop/reference/read_spectramax.html</loc>
   </url>
   <url>
     <loc>https://kaiaragaki.github.io/mop/reference/scrub.html</loc>
@@ -43,9 +58,15 @@
     <loc>https://kaiaragaki.github.io/mop/reference/scrub.nanodrop.html</loc>
   </url>
   <url>
+    <loc>https://kaiaragaki.github.io/mop/reference/scrub.spectramax.html</loc>
+  </url>
+  <url>
     <loc>https://kaiaragaki.github.io/mop/reference/tidy_lab.html</loc>
   </url>
   <url>
     <loc>https://kaiaragaki.github.io/mop/reference/tidy_lab.nanodrop.html</loc>
+  </url>
+  <url>
+    <loc>https://kaiaragaki.github.io/mop/reference/tidy_lab.pcr.html</loc>
   </url>
 </urlset>
