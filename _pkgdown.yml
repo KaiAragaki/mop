@@ -7,11 +7,17 @@ reference:
   - tidy_lab
   - scrub
 - title: Readers
-  contents: starts_with("read")
+  contents: matches("read")
 - title: Tidiers
-  contents: starts_with("tidy")
+  contents: matches("tidy")
 - title: Scrubbers
-  contents: starts_with("scrub")
+  contents: matches("scrub")
 - title: Nanodrop
   contents: matches("nanodrop")
+- title: PCR
+  contents: matches("pcr")
+- title: Spectramax
+  contents: matches("spectramax")
+- title: Utilities
+  contents: starts_with("pad_zero")
 
