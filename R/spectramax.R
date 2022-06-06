@@ -1,7 +1,7 @@
 #' Constructor for a spectramax object
 #'
 #' @param data a `data.frame`, no restrictions on form.
-#' @param raw_data `raw`. Typically represents read-in data with no changes to it.
+#' @param raw_data `raw`, read in from the provided file with `readr::read_file_raw()`
 #' @param date `lubridate::Date` object
 #' @param experiment_type `character`, no restrictions on form
 #' @param is_tidy `logical`. Are the `data` provided tidy?
