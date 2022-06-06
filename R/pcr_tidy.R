@@ -21,11 +21,11 @@ tidy_lab.pcr <- function(x, usr_standards = NULL, pad_zero = FALSE, ...) {
   }
 
   x$data <- x$data |>
-    dplyr::mutate(well_row = stringr::str_extract(.data$well_position, "^.{1}"),
-                  well_col = as.numeric(stringr::str_extract(.data$well_position, "[:digit:]{1,2}$")),
-                  well_row = as.numeric(factor(.data$well_row, levels = LETTERS)),
+    dplyr::mutate(.row = stringr::str_extract(.data$well_position, "^.{1}"),
+                  .col = as.numeric(stringr::str_extract(.data$well_position, "[:digit:]{1,2}$")),
+                  .row = as.numeric(factor(.data$.row, levels = LETTERS)),
                   ct = as.numeric(ct) |> suppressWarnings()) |>
-    dplyr::relocate(well_row, well_col)
+    dplyr::relocate(.row, .col)
 
   if (x$experiment_type == "standard_curve") {
 
@@ -80,6 +80,14 @@ tidy_lab.pcr <- function(x, usr_standards = NULL, pad_zero = FALSE, ...) {
 
   if (pad_zero) {
     x$data$sample_name <- pad_zero(x$data$sample_name)
+  }
+
+  if (x$wells == 384) {
+    x$data <- gp::gp_unserve(x$data, nrow = 16, ncol = 24)
+  } else if (x$wells == 96) {
+    x$data <- gp::gp_unserve(x$data, nrow = 8, ncol = 12)
+  } else {
+    x$data <- gp::gp_unserve(x$data)
   }
 
   x$is_tidy <- TRUE

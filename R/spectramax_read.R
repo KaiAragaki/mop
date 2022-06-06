@@ -17,6 +17,10 @@
 #'   pq (Protein Quantification) and mtt supported)} \item{tidy}{logical. Should
 #'   always return TRUE if read in using `read_spectramax`} }
 #' @export
+#'
+#' @example
+#' system.file("extdata", "spectramax.txt", package = "mop") |>
+#'   read_spectramax()
 read_spectramax <- function(path, date = Sys.Date(), experiment_type = c("pq", "mtt")) {
 
   experiment_type <- rlang::arg_match(experiment_type)
