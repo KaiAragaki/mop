@@ -30,7 +30,7 @@ pad_zero <- function(sample_names) {
   name_frame <-
     dplyr::tibble(sample_names, nums, padded_nums) |>
     dplyr::mutate(new_names = purrr::pmap_chr(list(sample_names, nums, padded_nums), stringr::str_replace),
-                  new_names = ifelse(is.na(new_names), sample_names, new_names))
+                  new_names = ifelse(is.na(.data$new_names), .data$sample_names, .data$new_names))
 
   name_frame$new_names
 }

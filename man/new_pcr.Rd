@@ -7,8 +7,8 @@
 new_pcr(
   data = data.frame(),
   raw_data = raw(),
-  header = data.frame(),
-  footer = data.frame(),
+  header = character(),
+  footer = character(),
   date = lubridate::Date(),
   experiment_type = character(),
   wells = integer(),
@@ -29,6 +29,8 @@ the data. Usually contains analysis information. May not exist.}
 \item{date}{\code{lubridate::Date} object}
 
 \item{experiment_type}{\code{character}. Could}
+
+\item{wells}{Number of wells in plate}
 
 \item{is_tidy}{\code{logical}. Is the \code{data.frame} provided tidy?}
 }

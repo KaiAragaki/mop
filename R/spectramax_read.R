@@ -18,8 +18,8 @@
 #' }
 #' @export
 #' @example
-#' system.file("extdata", "spectramax.txt", package = "mop") |>
-#'   read_spectramax()
+#' system.file("extdata", "spectramax.txt", package = "mop") |> read_spectramax()
+#'
 read_spectramax <- function(path, date = Sys.Date(), experiment_type = c("pq", "mtt")) {
 
   experiment_type <- rlang::arg_match(experiment_type)
@@ -60,11 +60,11 @@ read_spectramax <- function(path, date = Sys.Date(), experiment_type = c("pq", "
     out <- purrr::map2(x$skip, x$read_n,
                        ~readr::read_tsv(path, skip = .x, n_max = .y,
                                         show_col_types = FALSE, skip_empty_rows = FALSE)) |>
-      lapply(\(x) setNames(x, janitor::make_clean_names(colnames(x))))
+      lapply(\(x) stats::setNames(x, janitor::make_clean_names(colnames(x))))
 
     x <- tibble::tibble(out, types) |>
       dplyr::mutate(clean = purrr::map2(out, types, tidy_spectramax)) |>
-      dplyr::select(type = types, data = clean)
+      dplyr::select(type = .data$types, data = .data$clean)
   }
 
   new_spectramax(

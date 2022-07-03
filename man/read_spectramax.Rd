@@ -15,13 +15,13 @@ read_spectramax(path, date = Sys.Date(), experiment_type = c("pq", "mtt"))
 quantification, or mtt}
 }
 \value{
-A list, wih the following form: \describe{ \item{data}{a \code{tibble}
-that contains two columns - the \code{type}, and the (tidy) \code{data} itself in a list-column.}
+A list, with the following form: \describe{
+\item{data}{a \code{tibble} that contains two columns - the \code{type}, and the (tidy) \code{data} itself in a list-column.}
 \item{raw_data}{a \code{raw} representation of the file, before tidying}
 \item{date}{character. The date of the experiment}
-\item{experiment_type}{character. The type of exeperiment (currently only
-pq (Protein Quantification) and mtt supported)} \item{tidy}{logical. Should
-always return TRUE if read in using \code{read_spectramax}} }
+\item{experiment_type}{character. The type of experiment (currently only pq (Protein Quantification) and mtt supported)}
+\item{tidy}{logical. Should always return TRUE if read in using \code{read_spectramax}}
+}
 }
 \description{
 Read and tidy a SPECTRAmax file

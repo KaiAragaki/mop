@@ -2,10 +2,11 @@
 #'
 #' @param x a `nanodrop` object
 #' @param raw Should the data be pulled from `x$raw_data`?
+#' @param ... Unused
 #'
 #' @return a `tibble`
 #' @export
-scrub.nanodrop <- function(x, raw = FALSE) {
+scrub.nanodrop <- function(x, raw = FALSE, ...) {
 
   if (raw) data <- x$raw_data else data <- x$data
 

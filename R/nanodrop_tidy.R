@@ -4,6 +4,7 @@
 #'
 #' @param force_tidy `logical`. Should the tidying take place, even if the
 #'   `is_tidy` attribute is `TRUE`?
+#' @param ... Unused
 #'
 #' @return a `nanodrop` object
 #'

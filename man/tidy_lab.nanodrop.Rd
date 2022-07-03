@@ -11,6 +11,8 @@
 
 \item{force_tidy}{\code{logical}. Should the tidying take place, even if the
 \code{is_tidy} attribute is \code{TRUE}?}
+
+\item{...}{Unused}
 }
 \value{
 a \code{nanodrop} object

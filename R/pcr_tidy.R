@@ -3,9 +3,9 @@
 #' @param x a `pcr` object
 #' @param usr_standards Custom supplied standards
 #' @param pad_zero Should, say, Sample 1 become Sample 01?
-#' @param ...
+#' @param ... Unused
 #'
-#' @return
+#' @return a `pcr` object
 #' @export
 tidy_lab.pcr <- function(x, usr_standards = NULL, pad_zero = FALSE, ...) {
 
@@ -24,15 +24,15 @@ tidy_lab.pcr <- function(x, usr_standards = NULL, pad_zero = FALSE, ...) {
     dplyr::mutate(.row = stringr::str_extract(.data$well_position, "^.{1}"),
                   .col = as.numeric(stringr::str_extract(.data$well_position, "[:digit:]{1,2}$")),
                   .row = as.numeric(factor(.data$.row, levels = LETTERS)),
-                  ct = as.numeric(ct) |> suppressWarnings()) |>
-    dplyr::relocate(.row, .col)
+                  ct = as.numeric(.data$ct) |> suppressWarnings()) |>
+    dplyr::relocate(.data$.row, .data$.col)
 
   if (x$experiment_type == "standard_curve") {
 
     standards <- x$data |>
-      dplyr::filter(task == "STANDARD") |>
-      dplyr::arrange(quantity) |> # for findInterval
-      dplyr::pull(quantity) |>
+      dplyr::filter(.data$task == "STANDARD") |>
+      dplyr::arrange(.data$quantity) |> # for findInterval
+      dplyr::pull(.data$quantity) |>
       unique()
 
     if (is.null(usr_standards)) {
@@ -42,7 +42,7 @@ tidy_lab.pcr <- function(x, usr_standards = NULL, pad_zero = FALSE, ...) {
     usr_standards <- usr_standards |>
       tibble::enframe(name = "name", value = "usr_quantity") |>
       dplyr::mutate(name = paste("Standard", seq_len(length(usr_standards)))) |>
-      dplyr::arrange(usr_quantity)
+      dplyr::arrange(.data$usr_quantity)
 
     if (nrow(usr_standards) > length(standards)) {
       rlang::abort("More standards supplied than exist in dataset")
@@ -65,16 +65,16 @@ tidy_lab.pcr <- function(x, usr_standards = NULL, pad_zero = FALSE, ...) {
       dplyr::bind_cols(usr_standards)
 
     x$data <- dplyr::left_join(x$data, final, by = c("task", "quantity")) |>
-      dplyr::mutate(sample_name = ifelse(is.na(sample_name), name, sample_name))
+      dplyr::mutate(sample_name = ifelse(is.na(.data$sample_name), .data$name, .data$sample_name))
 
     dropping <- x$data |>
-      dplyr::filter(is.na(sample_name) & task == "STANDARD")
+      dplyr::filter(is.na(.data$sample_name) & .data$task == "STANDARD")
 
     if (nrow(dropping) > 0) {
       x$data <- x$data |>
-        dplyr::filter(!is.na(sample_name) | task != "STANDARD")
+        dplyr::filter(!is.na(.data$sample_name) | .data$task != "STANDARD")
       message(nrow(dropping), " rows of standards did not have a matching value in 'standards' and have been dropped")
-      x$data <- pcr_calc_slope(x$data)
+      x$data <- amplify::pcr_calc_slope(x$data)
     }
   }
 

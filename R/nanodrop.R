@@ -173,11 +173,11 @@ validate_nanodrop_names <- function(x) {
   untidy_req_names <-
     rbind(universal_req_names,
           data.frame(name = c("nucleicacidngul", "a260a280", "a260a230"))) |>
-    dplyr::mutate(name = stringr::str_remove_all(name, "_"))
+    dplyr::mutate(name = stringr::str_remove_all(.data$name, "_"))
 
   untidy_allowed_names <-
     rbind(untidy_req_names, universal_allowed_names) |>
-    dplyr::mutate(name = stringr::str_remove_all(name, "_"))
+    dplyr::mutate(name = stringr::str_remove_all(.data$name, "_"))
 
   og_names <- colnames(x$data)
 

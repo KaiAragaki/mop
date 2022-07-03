@@ -13,7 +13,10 @@
 
 \item{pad_zero}{Should, say, Sample 1 become Sample 01?}
 
-\item{...}{}
+\item{...}{Unused}
+}
+\value{
+a \code{pcr} object
 }
 \description{
 Tidy a PCR object

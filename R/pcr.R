@@ -9,6 +9,7 @@
 #'   the data. Usually contains run information.
 #' @param footer `data.frame`, the lower portion of the data after the body of
 #'   the data. Usually contains analysis information. May not exist.
+#' @param wells Number of wells in plate
 #'
 #' @return A `pcr` object
 #' @export
