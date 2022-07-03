@@ -42,12 +42,12 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">nanodrop</span><span class="op">(</span>
-  <span class="va">data</span>,
-  date <span class="op">=</span> <span class="cn">NULL</span>,
-  nucleotide <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RNA"</span>, <span class="st">"DNA"</span>, <span class="st">"dsDNA"</span>, <span class="st">"dsRNA"</span><span class="op">)</span>,
-  is_tidy <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">nanodrop</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  date <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nucleotide <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"RNA"</span>, <span class="st">"DNA"</span>, <span class="st">"dsDNA"</span>, <span class="st">"dsRNA"</span><span class="op">)</span>,</span>
+<span>  is_tidy <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -55,19 +55,28 @@
     <dl><dt>data</dt>
 <dd><p>a <code>data.frame</code> - or something coercible to one - containing
 nanodrop data. See details for requirements.</p></dd>
+
+
 <dt>date</dt>
 <dd><p>an optional character vector or something coercible to a <code>Date</code>
 object with <code><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">lubridate::as_date</a></code></p></dd>
+
+
 <dt>nucleotide</dt>
 <dd><p>a character vector to specifying the analyte in the
 nanodrop experiment. Must match one of the following: RNA, DNA, dsDNA, or
 dsRNA.</p></dd>
+
+
 <dt>is_tidy</dt>
 <dd><p>logical. Is the supplied data tidy?</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a <code>nanodrop</code> object</p>
+    
+
+<p>a <code>nanodrop</code> object</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -98,12 +107,12 @@ Example B below.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="co"># Example A: colnames allowed when is_tidy = FALSE</span></span>
-<span class="r-in"><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"nanodrop.csv"</span>, package <span class="op">=</span> <span class="st">"mop"</span><span class="op">)</span> |&gt;</span>
-<span class="r-in"><span class="fu"><a href="read_nanodrop.html">read_nanodrop</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">data</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example A: colnames allowed when is_tidy = FALSE</span></span></span>
+<span class="r-in"><span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"nanodrop.csv"</span>, package <span class="op">=</span> <span class="st">"mop"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="read_nanodrop.html">read_nanodrop</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">data</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "Date"                     "Sample.Name"             </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [3] "Nucleic.Acid.ng.uL."      "A260.A280"               </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [5] "A260.A230"                "A260"                    </span>
@@ -116,11 +125,11 @@ Example B below.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [19] "Impurity.2..CV"           "Impurity.2.mM"           </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [21] "Impurity.3"               "Impurity.3.A260"         </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [23] "Impurity.3..CV"           "Impurity.3.mM"           </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Technically, these are the names that are checked for after the given names</span></span>
-<span class="r-in"><span class="co"># have alphanumerics removed and are converted to lowercase:</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">data</span><span class="op">)</span> |&gt; <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html" class="external-link">str_remove_all</a></span><span class="op">(</span><span class="st">"[^[:alnum:]]"</span><span class="op">)</span> |&gt; <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Technically, these are the names that are checked for after the given names</span></span></span>
+<span class="r-in"><span><span class="co"># have alphanumerics removed and are converted to lowercase:</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">a</span><span class="op">$</span><span class="va">data</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html" class="external-link">str_remove_all</a></span><span class="op">(</span><span class="st">"[^[:alnum:]]"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/chartr.html" class="external-link">tolower</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "date"                 "samplename"           "nucleicacidngul"     </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [4] "a260a280"             "a260a230"             "a260"                </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "a280"                 "nucleicacidfactor"    "baselinecorrectionnm"</span>
@@ -129,12 +138,12 @@ Example B below.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [16] "impurity1mm"          "impurity2"            "impurity2a260"       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [19] "impurity2cv"          "impurity2mm"          "impurity3"           </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [22] "impurity3a260"        "impurity3cv"          "impurity3mm"         </span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example B: colnames allowed when is_tidy = TRUE</span></span>
-<span class="r-in"><span class="va">b</span> <span class="op">&lt;-</span> <span class="va">a</span> |&gt; <span class="fu"><a href="tidy_lab.html">tidy_lab</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">b</span><span class="op">$</span><span class="va">data</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example B: colnames allowed when is_tidy = TRUE</span></span></span>
+<span class="r-in"><span><span class="va">b</span> <span class="op">&lt;-</span> <span class="va">a</span> <span class="op">|&gt;</span> <span class="fu"><a href="tidy_lab.html">tidy_lab</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">b</span><span class="op">$</span><span class="va">data</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] "date"                   "sample_name"            "conc"                  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [4] "a260_280"               "a260_230"               "a260"                  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7] "a280"                   "nucleic_acid_factor"    "baseline_correction_nm"</span>
@@ -143,7 +152,7 @@ Example B below.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [16] "impurity_1_m_m"         "impurity_2"             "impurity_2_a260"       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [19] "impurity_2_cv"          "impurity_2_m_m"         "impurity_3"            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [22] "impurity_3_a260"        "impurity_3_cv"          "impurity_3_m_m"        </span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -155,7 +164,7 @@ Example B below.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

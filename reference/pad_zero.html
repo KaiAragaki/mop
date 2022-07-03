@@ -42,35 +42,38 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">pad_zero</span><span class="op">(</span><span class="va">sample_names</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pad_zero</span><span class="op">(</span><span class="va">sample_names</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>sample_names</dt>
 <dd><p>a vector of sample names</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A sample name with up to one zero padded</p>
+    
+
+<p>A sample name with up to one zero padded</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blueberry"</span>, <span class="st">"Sample 1"</span>, <span class="st">"Sample 10"</span>, <span class="st">"sample 2"</span>, <span class="st">"john"</span>, <span class="st">"larry"</span>, <span class="st">"toxic waste"</span>, <span class="st">"Sample 02"</span><span class="op">)</span> |&gt;</span>
-<span class="r-in">  <span class="fu">pad_zero</span><span class="op">(</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blueberry"</span>, <span class="st">"Sample 1"</span>, <span class="st">"Sample 10"</span>, <span class="st">"sample 2"</span>, <span class="st">"john"</span>, <span class="st">"larry"</span>, <span class="st">"toxic waste"</span>, <span class="st">"Sample 02"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">pad_zero</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "blueberry"   "Sample 01"   "Sample 10"   "sample 2"    "john"       </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [6] "larry"       "toxic waste" "Sample 02"  </span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># pad_zero will not pad if it doesn't need to:</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sample 1"</span>, <span class="st">"Sample 2"</span>, <span class="st">"Sample 9"</span><span class="op">)</span> |&gt; <span class="fu">pad_zero</span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># pad_zero will not pad if it doesn't need to:</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sample 1"</span>, <span class="st">"Sample 2"</span>, <span class="st">"Sample 9"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">pad_zero</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sample 1" "Sample 2" "Sample 9"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># pad_zero is case sensitive, since these will be coming off a machine in a standardized format</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample 10"</span>, <span class="st">"sample 1"</span><span class="op">)</span> |&gt; <span class="fu">pad_zero</span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># pad_zero is case sensitive, since these will be coming off a machine in a standardized format</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sample 10"</span>, <span class="st">"sample 1"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">pad_zero</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "sample 10" "sample 1" </span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sample 10"</span>, <span class="st">"Sample 1"</span><span class="op">)</span> |&gt; <span class="fu">pad_zero</span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sample 10"</span>, <span class="st">"Sample 1"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">pad_zero</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Sample 10" "Sample 01"</span>
 </code></pre></div>
     </div>
@@ -83,7 +86,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>
