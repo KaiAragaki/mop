@@ -9,15 +9,14 @@
 #'   simultaneously, due to their non-rectangular structure. Therefore, tidying
 #'   is _required_ to be read in and is not an option supplied.
 #'
-#' @return A list, with the following form: \describe{ \item{data}{a `tibble`
-#'   that contains two columns - the `type`, and the (tidy) `data` itself in a list-column.}
-#'   \item{raw_data}{a `raw` representation of the file, before tidying}
-#'   \item{date}{character. The date of the experiment}
-#'   \item{experiment_type}{character. The type of experiment (currently only
-#'   pq (Protein Quantification) and mtt supported)} \item{tidy}{logical. Should
-#'   always return TRUE if read in using `read_spectramax`} }
+#' @return A list, with the following form: \describe{
+#' \item{data}{a `tibble` that contains two columns - the `type`, and the (tidy) `data` itself in a list-column.}
+#' \item{raw_data}{a `raw` representation of the file, before tidying}
+#' \item{date}{character. The date of the experiment}
+#' \item{experiment_type}{character. The type of experiment (currently only pq (Protein Quantification) and mtt supported)}
+#' \item{tidy}{logical. Should always return TRUE if read in using `read_spectramax`}
+#' }
 #' @export
-#'
 #' @example
 #' system.file("extdata", "spectramax.txt", package = "mop") |>
 #'   read_spectramax()
@@ -34,34 +33,36 @@ read_spectramax <- function(path, date = Sys.Date(), experiment_type = c("pq", "
   }
 
   if (fs::path_ext(path) == "txt") {
+
     lines <- path |>
       readr::read_file() |>
       strsplit("\r\n") |>
       unlist()
+
     block_start <- c(1, which(lines == "~End"))
     blank_lines <- c(which(grepl("^\t*$", lines)))
     both <- c(block_start, blank_lines)
     both <- both[order(both)]
     block_end <- both[which(both %in% block_start) + 1]
+
     x <- tibble::tibble(skip = block_start + 1,
                         read_n = block_end - block_start - 3) |>
       dplyr::slice_head(n = -1)
-    types <-
-      purrr::map(block_start[-length(block_start)],
-                 ~readr::read_tsv(path, skip = .x, n_max = 1, col_names = FALSE,
-                                  show_col_types = FALSE, skip_empty_rows = FALSE)) |>
+
+    types <- purrr::map(block_start[-length(block_start)],
+                        ~readr::read_tsv(path, skip = .x, n_max = 1, col_names = FALSE,
+                                         show_col_types = FALSE, skip_empty_rows = FALSE)) |>
       lapply(\(x) x[1,1]) |>
       unlist() |>
       tolower() |>
       stringr::str_remove(":$")
-    out <-
-      purrr::map2(x$skip, x$read_n,
-                  ~readr::read_tsv(path, skip = .x, n_max = .y,
-                                   show_col_types = FALSE, skip_empty_rows = FALSE)) |>
+
+    out <- purrr::map2(x$skip, x$read_n,
+                       ~readr::read_tsv(path, skip = .x, n_max = .y,
+                                        show_col_types = FALSE, skip_empty_rows = FALSE)) |>
       lapply(\(x) setNames(x, janitor::make_clean_names(colnames(x))))
 
-    x <-
-      tibble::tibble(out, types) |>
+    x <- tibble::tibble(out, types) |>
       dplyr::mutate(clean = purrr::map2(out, types, tidy_spectramax)) |>
       dplyr::select(type = types, data = clean)
   }
