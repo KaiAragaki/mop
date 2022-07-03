@@ -22,4 +22,6 @@ Imports:
     stringr,
     utils,
     vctrs
+Remotes:
+    KaiAragaki/gp
 URL: https://kaiaragaki.github.io/mop/

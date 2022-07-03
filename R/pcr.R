@@ -12,20 +12,20 @@
 #'
 #' @return A `pcr` object
 #' @export
-new_pcr <- function(data = data.frame(), raw_data = raw(), header = data.frame(),
-                    footer = data.frame(), date = lubridate::Date(),
+new_pcr <- function(data = data.frame(), raw_data = raw(), header = character(),
+                    footer = character(), date = lubridate::Date(),
                     experiment_type = character(), wells = integer(), is_tidy = logical()) {
   stopifnot(is.data.frame(data),
-            is.raw(raw_data),
-            is.data.frame(header),
-            is.data.frame(footer))
+            is.raw(raw_data))
   vec_assert(date, lubridate::Date())
+  vec_assert(header, character())
+  vec_assert(footer, character())
   vec_assert(experiment_type, character())
   vec_assert(wells, integer())
   vec_assert(is_tidy, logical())
 
-  new_vctr(list(data = I(data), raw_data = raw_data, header = I(header),
-                footer = I(footer), date = date,
+  new_vctr(list(data = I(data), raw_data = raw_data, header = header,
+                footer = footer, date = date,
                 experiment_type = experiment_type, wells = wells, is_tidy = is_tidy),
            class = "pcr")
 }
