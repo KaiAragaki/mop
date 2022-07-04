@@ -31,4 +31,5 @@ Imports:
     vctrs
 Remotes:
     KaiAragaki/gp
+    KaiAragaki/amplify
 URL: https://kaiaragaki.github.io/mop/
