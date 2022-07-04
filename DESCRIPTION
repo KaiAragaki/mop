@@ -30,6 +30,6 @@ Imports:
     utils,
     vctrs
 Remotes:
-    KaiAragaki/gp
+    KaiAragaki/gp,
     KaiAragaki/amplify
 URL: https://kaiaragaki.github.io/mop/
