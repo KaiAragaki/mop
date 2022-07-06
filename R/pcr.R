@@ -74,7 +74,7 @@ as_pcr <- function(x) {
   data <- x |>
     dplyr::select(-.data$date, -.data$experiment_type, -.data$wells)
   new_pcr(data = gp::gp_unserve(data, nrow = plate_dims$rows, ncol = plate_dims$cols),
-          date = lubridate::Date(x$date[1]),
+          date = lubridate::as_date(x$date[1]),
           wells = x$wells[1],
           experiment_type = x$experiment_type[1],
           is_tidy = TRUE)
