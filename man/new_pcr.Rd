@@ -16,7 +16,7 @@ new_pcr(
 )
 }
 \arguments{
-\item{data}{\code{data.frame}, no restrictions on form.}
+\item{data}{\code{data.frame} or \code{gp}, no restrictions on form.}
 
 \item{raw_data}{\code{raw}, read in from the provided file with \code{readr::read_file_raw()}}
 

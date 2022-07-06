@@ -1,6 +1,6 @@
 #' Constructor for a pcr object
 #'
-#' @param data `data.frame`, no restrictions on form.
+#' @param data `data.frame` or `gp`, no restrictions on form.
 #' @param raw_data `raw`, read in from the provided file with `readr::read_file_raw()`
 #' @param date `lubridate::Date` object
 #' @param experiment_type `character`. Could
@@ -16,7 +16,7 @@
 new_pcr <- function(data = data.frame(), raw_data = raw(), header = character(),
                     footer = character(), date = lubridate::Date(),
                     experiment_type = character(), wells = integer(), is_tidy = logical()) {
-  stopifnot(is.data.frame(data),
+  stopifnot(is.data.frame(data) | class(data) == "gp",
             is.raw(raw_data))
   vec_assert(date, lubridate::Date())
   vec_assert(header, character())
@@ -60,4 +60,26 @@ obj_print_footer.pcr <- function(x, ...) {
   cat(crayon::silver("# Date:"),
       ifelse(!is.null(x$date), as.character(x$date), "NULL"),
       "\n")
+}
+
+
+#' Convert a scrubbed pcr object back to a pcr object
+#'
+#' @param x A `tibble` - usually a previously scrubbed `pcr` object.
+#'
+#' @return A `pcr` object
+#' @export
+as_pcr <- function(x) {
+  plate_dims <- gp::plate_formats[which(gp::plate_formats[1] == x$wells[1]), -1]
+  data <- x |>
+    dplyr::select(-.data$date, -.data$experiment_type, -.data$wells)
+  new_pcr(data = gp::gp_unserve(data, nrow = plate_dims$rows, ncol = plate_dims$cols),
+          date = lubridate::Date(x$date[1]),
+          wells = x$wells[1],
+          experiment_type = x$experiment_type[1],
+          is_tidy = TRUE)
+}
+
+pcr_check <- function(x) {
+
 }
