@@ -73,10 +73,35 @@ as_pcr <- function(x) {
   plate_dims <- gp::plate_formats[which(gp::plate_formats[1] == x$wells[1]), -1]
   data <- x |>
     dplyr::select(-.data$date, -.data$experiment_type, -.data$wells)
+
+  footer_names <- c("analysis_type", "endogenous_control", "rq_min_max_confidence_level", "reference_sample")
+  header_names <- c("block_type", "calibration_background_is_expired",
+                    "calibration_background_performed_on", "calibration_normalization_fam_rox_is_expired",
+                    "calibration_normalization_fam_rox_performed_on", "calibration_normalization_vic_rox_is_expired",
+                    "calibration_normalization_vic_rox_performed_on", "calibration_pure_dye_fam_is_expired",
+                    "calibration_pure_dye_fam_performed_on",
+                    "calibration_pure_dye_ned_is_expired", "calibration_pure_dye_ned_performed_on",
+                    "calibration_pure_dye_rox_is_expired", "calibration_pure_dye_rox_performed_on",
+                    "calibration_pure_dye_sybr_is_expired", "calibration_pure_dye_sybr_performed_on",
+                    "calibration_pure_dye_tamra_is_expired", "calibration_pure_dye_tamra_performed_on",
+                    "calibration_pure_dye_vic_is_expired", "calibration_pure_dye_vic_performed_on",
+                    "calibration_roi_is_expired", "calibration_roi_performed_on",
+                    "calibration_uniformity_is_expired", "calibration_uniformity_performed_on",
+                    "chemistry", "date_created", "experiment_barcode", "experiment_comment",
+                    "experiment_file_name", "experiment_name", "experiment_run_end_time",
+                    "experiment_type", "instrument_name", "instrument_serial_number",
+                    "instrument_type", "passive_reference", "quantification_cycle_method",
+                    "signal_smoothing_on", "stage_cycle_where_analysis_is_performed", "user_name")
+
+  footer <- dplyr::select(x, dplyr::any_of(footer_names)) |> dplyr::slice(1) |> t() |> tibble::as_tibble(rownames = "name", .name_repair = "minimal") |> tibble::deframe()
+  header <- dplyr::select(x, dplyr::any_of(header_names)) |> dplyr::slice(1) |> t() |> tibble::as_tibble(rownames = "name", .name_repair = "minimal") |> tibble::deframe()
+
   new_pcr(data = gp::gp_unserve(data, nrow = plate_dims$rows, ncol = plate_dims$cols),
           date = lubridate::as_date(x$date[1]),
           wells = x$wells[1],
           experiment_type = x$experiment_type[1],
+          header = header,
+          footer = footer,
           is_tidy = TRUE)
 }
 

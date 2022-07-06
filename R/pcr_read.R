@@ -23,6 +23,7 @@ read_pcr <- function(path) {
     dplyr::slice_head(n = (breaks[1] - 1)) |>
     dplyr::select(1:2) |>
     tibble::deframe()
+  names(header) <- janitor::make_clean_names(names(header))
 
   if (length(breaks) == 2) {
     body <- dplyr::slice(raw_data, (breaks[1]+1):(breaks[2]-1))
@@ -30,6 +31,7 @@ read_pcr <- function(path) {
       dplyr::slice((breaks[2]+1):nrow(raw_data)) |>
       dplyr::select(1:2) |>
       tibble::deframe()
+    names(footer) <- janitor::make_clean_names(names(footer))
   }
 
   # These files don't always have footers
@@ -42,17 +44,17 @@ read_pcr <- function(path) {
   # their proper types
   colnames(body) <- body[1,]
   body <- body[-1,]
-  body <- readr::type_convert(body, )
+  body <- readr::type_convert(body)
 
-  date <- header["Experiment Run End Time"]
+  date <- header["experiment_run_end_time"]
   date <- date |>
     strsplit(" ")
   date <- date[[1]][1]
   date <- lubridate::ymd(date)
 
-  experiment_type <- header["Experiment Type"]
+  experiment_type <- header["experiment_type"]
 
-  wells <- header["Block Type"] |>
+  wells <- header["block_type"] |>
     stringr::str_extract("[^[:space:]|\b]*(?=-Well)") |>
     as.integer()
 
