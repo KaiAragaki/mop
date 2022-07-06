@@ -31,11 +31,6 @@ new_pcr <- function(data = data.frame(), raw_data = raw(), header = character(),
            class = "pcr")
 }
 
-pcr <- function() {
-
-}
-
-
 #' @export
 obj_print_data.pcr <- function(x, ...) {
   print(x$data)
@@ -71,8 +66,6 @@ obj_print_footer.pcr <- function(x, ...) {
 #' @export
 as_pcr <- function(x) {
   plate_dims <- gp::plate_formats[which(gp::plate_formats[1] == x$wells[1]), -1]
-  data <- x |>
-    dplyr::select(-.data$date, -.data$experiment_type, -.data$wells)
 
   footer_names <- c("analysis_type", "endogenous_control", "rq_min_max_confidence_level", "reference_sample")
   header_names <- c("block_type", "calibration_background_is_expired",
@@ -93,6 +86,9 @@ as_pcr <- function(x) {
                     "instrument_type", "passive_reference", "quantification_cycle_method",
                     "signal_smoothing_on", "stage_cycle_where_analysis_is_performed", "user_name")
 
+  data <- x |>
+    dplyr::select(-.data$date, -.data$experiment_type, -.data$wells, -dplyr::any_of(c(footer_names, header_names)))
+
   footer <- dplyr::select(x, dplyr::any_of(footer_names)) |> dplyr::slice(1) |> t() |> tibble::as_tibble(rownames = "name", .name_repair = "minimal") |> tibble::deframe()
   header <- dplyr::select(x, dplyr::any_of(header_names)) |> dplyr::slice(1) |> t() |> tibble::as_tibble(rownames = "name", .name_repair = "minimal") |> tibble::deframe()
 
@@ -103,8 +99,4 @@ as_pcr <- function(x) {
           header = header,
           footer = footer,
           is_tidy = TRUE)
-}
-
-pcr_check <- function(x) {
-
 }
