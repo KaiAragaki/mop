@@ -1,16 +1,18 @@
 #' Convert a spectramax object into a tibble
 #'
 #' @param x a `spectramax` object
+#' @param n List item number to select data from
 #' @param ... Unused
 #'
 #' @return a `tibble`
 #' @export
-scrub.spectramax <- function(x, ...) {
-  data <- x$data
-  if (sum(data$type == "plate") > 1) {
-    rlang::inform("There are multiple plates in this dataset. Only the first will be selected.")
+scrub.spectramax <- function(x, n = 1, ...) {
+  if (x$data[[n]]$type == "Plate") {
+    x$data[[n]]$data |>
+      gp::gp_serve() |>
+      dplyr::mutate(exp_date = x$date, exp_type = x$experiment_type, is_tidy = x$is_tidy)
+  } else {
+    x$data[[n]]$data |>
+      dplyr::mutate(exp_date = x$date, exp_type = x$experiment_type, is_tidy = x$is_tidy)
   }
-  plate <- data[which(data$type == "plate")[1], 2][[1]][[1]]
-  gp::gp_serve(plate) |>
-    dplyr::mutate(exp_date = x$date, exp_type = x$experiment_type, is_tidy = x$is_tidy)
 }

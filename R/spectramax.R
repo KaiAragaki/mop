@@ -10,7 +10,7 @@
 #' @export
 new_spectramax <- function(data = data.frame(), raw_data = raw(), date = lubridate::Date(),
                            experiment_type = character(), is_tidy = logical()) {
-  stopifnot(is.data.frame(data),
+  stopifnot(is.list(data),
             is.raw(raw_data))
   vec_assert(date, lubridate::Date())
   vec_assert(experiment_type, character())
