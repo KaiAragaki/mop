@@ -22,54 +22,17 @@
 #'
 read_spectramax <- function(path, date = Sys.Date(), experiment_type = c("pq", "mtt")) {
 
+  ext <- fs::path_ext(path)
   experiment_type <- rlang::arg_match(experiment_type)
-  # For those doing the 'copy paste into excel' method
-  if (fs::path_ext(path) == "xls" | fs::path_ext(path) == "xlsx") {
-    if (experiment_type == "mtt") {
-      wavelengths <- c(562, 660)
-    }
-    if (experiment_type == "pq") {
-      wavelengths <- c(562)
-    }
 
-    x <- readxl::read_excel(path) |>
-      dplyr::select(-1)
-    x <- x[stats::complete.cases(t(x))] # Remove empty cols
-    x <- x |>
-      dplyr::mutate(.row = 1:nrow(x)) |>
-      tidyr::pivot_longer(-.data$.row) |>
-      dplyr::mutate(.col = stringr::str_extract(.data$name, "^[[:digit:]]*"),
-                    .wavelength = stringr::str_extract(.data$name, "[^\\.]*$")) |>
-      dplyr::group_by(.row, .col) |>
-      dplyr::mutate(.wavelength = .data$.wavelength |> as.numeric() |> rank(),
-                    .wavelength = paste0("nm", wavelengths[.data$.wavelength])) |>
-      dplyr::select(-.data$name) |>
-      tidyr::pivot_wider(names_from = .data$.wavelength, values_from = .data$value) |>
-      readr::type_convert()
-    data <- gp::gp(rows = max(x$.row), cols = max(x$.col), data = x, tidy = TRUE)
-    out <- list(data = data, type = "Plate", wavelengths = wavelengths) |> list()
-  }
-
-  # For those exporting from the .exe itself
-  if (fs::path_ext(path) == "txt") {
-    lines <- path |>
-      readr::read_file() |>
-      strsplit("\r\n") |>
-      unlist()
-
-    block_start <- c(1, which(lines == "~End"))
-    blank_lines <- c(which(grepl("^\t*$", lines)))
-    both <- c(block_start, blank_lines)
-    both <- both[order(both)]
-    block_end <- both[which(both %in% block_start) + 1]
-
-    x <- tibble::tibble(skip = block_start + 1,
-                        read_n = block_end - block_start - 3) |>
-      dplyr::slice_head(n = -1)
-
-    out <- purrr::map2(x$skip, x$read_n,
-                       ~read_section(path, n_skip = .x, n_read = .y)) |>
-      purrr::map(tidy_section)
+  if (ext == "txt") {
+    # For those exporting from the .exe itself
+    out <- read_spectramax_txt(path)
+  } else if (ext %in% c("xls", "xlsx")) {
+    # For those doing the 'copy paste into excel' method
+    out <- read_spectramax_excel(path, experiment_type)
+  } else {
+    rlang::abort("Unknown file extension")
   }
 
   new_spectramax(
@@ -79,6 +42,53 @@ read_spectramax <- function(path, date = Sys.Date(), experiment_type = c("pq", "
     experiment_type = experiment_type,
     is_tidy = TRUE
   )
+}
+
+read_spectramax_excel <- function(path, experiment_type) {
+  if (experiment_type == "mtt") {
+    wavelengths <- c(562, 660)
+  }
+  if (experiment_type == "pq") {
+    wavelengths <- c(562)
+  }
+
+  x <- readxl::read_excel(path) |>
+    dplyr::select(-1)
+  x <- x[stats::complete.cases(t(x))] # Remove empty cols
+  x <- x |>
+    dplyr::mutate(.row = 1:nrow(x)) |>
+    tidyr::pivot_longer(-.data$.row) |>
+    dplyr::mutate(.col = stringr::str_extract(.data$name, "^[[:digit:]]*"),
+                  .wavelength = stringr::str_extract(.data$name, "[^\\.]*$")) |>
+    dplyr::group_by(.row, .col) |>
+    dplyr::mutate(.wavelength = .data$.wavelength |> as.numeric() |> rank(),
+                  .wavelength = paste0("nm", wavelengths[.data$.wavelength])) |>
+    dplyr::select(-.data$name) |>
+    tidyr::pivot_wider(names_from = .data$.wavelength, values_from = .data$value) |>
+    readr::type_convert()
+  data <- gp::gp(rows = max(x$.row), cols = max(x$.col), data = x, tidy = TRUE)
+  out <- list(data = data, type = "Plate", wavelengths = wavelengths) |> list()
+}
+
+read_spectramax_txt <- function(path) {
+  lines <- path |>
+    readr::read_file() |>
+    strsplit("\r\n") |>
+    unlist()
+
+  block_start <- c(1, which(lines == "~End"))
+  blank_lines <- c(which(grepl("^\t*$", lines)))
+  both <- c(block_start, blank_lines)
+  both <- both[order(both)]
+  block_end <- both[which(both %in% block_start) + 1]
+
+  x <- tibble::tibble(skip = block_start + 1,
+                      read_n = block_end - block_start - 3) |>
+    dplyr::slice_head(n = -1)
+
+  out <- purrr::map2(x$skip, x$read_n,
+                     ~read_section(path, n_skip = .x, n_read = .y)) |>
+    purrr::map(tidy_section)
 }
 
 tidy_section <- function(section) {
