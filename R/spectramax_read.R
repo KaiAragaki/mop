@@ -19,9 +19,8 @@
 #' @export
 #' @example
 #' system.file("extdata", "spectramax.txt", package = "mop") |> read_spectramax()
-#'
 read_spectramax <- function(path, date = Sys.Date(), experiment_type = c("pq", "mtt")) {
-
+  rlang::inform("Please wait. This will take ~10 seconds.")
   ext <- fs::path_ext(path)
   experiment_type <- rlang::arg_match(experiment_type)
   raw <- readr::read_file_raw(path)
@@ -129,7 +128,7 @@ read_section <- function(raw, n_skip, n_read) {
   suppressMessages(
     header <- readr::read_tsv(raw, skip = n_skip - 1 , n_max = 1,
                               show_col_types = FALSE, skip_empty_rows = FALSE,
-                              col_names = FALSE, name_repair = "unique")
+                              col_names = FALSE, name_repair = "unique", guess_max = 10)
   )
 
   type <- header$X1 |> stringr::str_remove(":$")
@@ -138,7 +137,7 @@ read_section <- function(raw, n_skip, n_read) {
   suppressMessages(
     out <- readr::read_tsv(raw, skip = n_skip, n_max = n_read,
                            show_col_types = FALSE, skip_empty_rows = FALSE,
-                           name_repair = "unique")
+                           name_repair = "unique", guess_max = 10)
   )
 
   list(data = out, type = type, wavelengths = wavelengths)
