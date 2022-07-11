@@ -24,10 +24,11 @@ read_spectramax <- function(path, date = Sys.Date(), experiment_type = c("pq", "
 
   ext <- fs::path_ext(path)
   experiment_type <- rlang::arg_match(experiment_type)
+  raw <- readr::read_file_raw(path)
 
   if (ext == "txt") {
     # For those exporting from the .exe itself
-    out <- read_spectramax_txt(path)
+    out <- read_spectramax_txt(raw)
   } else if (ext %in% c("xls", "xlsx")) {
     # For those doing the 'copy paste into excel' method
     out <- read_spectramax_excel(path, experiment_type)
@@ -37,7 +38,7 @@ read_spectramax <- function(path, date = Sys.Date(), experiment_type = c("pq", "
 
   new_spectramax(
     data = out,
-    raw_data = readr::read_file_raw(path),
+    raw_data = raw,
     date = Sys.Date(),
     experiment_type = experiment_type,
     is_tidy = TRUE
@@ -70,16 +71,20 @@ read_spectramax_excel <- function(path, experiment_type) {
   out <- list(data = data, type = "Plate", wavelengths = wavelengths) |> list()
 }
 
-read_spectramax_txt <- function(path) {
-  lines <- path |>
+read_spectramax_txt <- function(raw) {
+  lines <- raw |>
     readr::read_file() |>
     strsplit("\r\n") |>
     unlist()
 
   block_start <- c(1, which(lines == "~End"))
+  # The first blank line in a given section denotes the end of 'useful'
+  # information (the rest tends to be footnotes). Unfortunately, that is not the
+  # ONLY blank line in a section.
   blank_lines <- c(which(grepl("^\t*$", lines)))
   both <- c(block_start, blank_lines)
   both <- both[order(both)]
+  # Get the next greatest hit in 'both' after a block_start
   block_end <- both[which(both %in% block_start) + 1]
 
   x <- tibble::tibble(skip = block_start + 1,
@@ -87,7 +92,7 @@ read_spectramax_txt <- function(path) {
     dplyr::slice_head(n = -1)
 
   out <- purrr::map2(x$skip, x$read_n,
-                     ~read_section(path, n_skip = .x, n_read = .y)) |>
+                     ~read_section(raw, n_skip = .x, n_read = .y)) |>
     purrr::map(tidy_section)
 }
 
@@ -98,14 +103,15 @@ tidy_section <- function(section) {
     data <- data |>
       dplyr::mutate(.row = 1:nrow(data)) |>
       tidyr::pivot_longer(-.data$.row) |>
-      dplyr::mutate(.col = stringr::str_extract(.data$name, "(?<=x)[[:digit:]]*"),
-                    .wavelength = stringr::str_extract(.data$name, "[^_]*$")) |>
+      dplyr::mutate(.col = stringr::str_extract(.data$name, "^[[:digit:]]*"),
+                    .wavelength = stringr::str_extract(.data$name, "[^\\.]*$")) |>
       dplyr::group_by(.row, .col) |>
       dplyr::mutate(.wavelength = .data$.wavelength |> as.numeric() |> rank(),
                     .wavelength = paste0("nm", section$wavelengths[.data$.wavelength])) |>
       dplyr::select(-.data$name) |>
-      tidyr::pivot_wider(names_from = .data$.wavelength, values_from = .data$value) |>
-      readr::type_convert()
+      tidyr::pivot_wider(names_from = .data$.wavelength, values_from = .data$value)
+
+    suppressMessages(data <- readr::type_convert(data))
     data <- gp::gp(rows = max(data$.row), cols = max(data$.col), data = data, tidy = TRUE)
   }
 
@@ -119,19 +125,21 @@ tidy_section <- function(section) {
   list(data = data, type = section$type, wavelengths = section$wavelengths)
 }
 
-read_section <- function(path, n_skip, n_read) {
-  # A single read in might be more efficient, but the autotyping borkage on
-  # readin might make it not worth it
-  header <- readr::read_tsv(path, skip = n_skip - 1 , n_max = 1,
-                            show_col_types = FALSE, skip_empty_rows = FALSE,
-                            col_names = FALSE)
+read_section <- function(raw, n_skip, n_read) {
+  suppressMessages(
+    header <- readr::read_tsv(raw, skip = n_skip - 1 , n_max = 1,
+                              show_col_types = FALSE, skip_empty_rows = FALSE,
+                              col_names = FALSE, name_repair = "unique")
+  )
 
   type <- header$X1 |> stringr::str_remove(":$")
   wavelengths <- header$X16 |> stringr::str_split(" ") |> unlist()
-
-  out <- readr::read_tsv(path, skip = n_skip, n_max = n_read,
-                         show_col_types = FALSE, skip_empty_rows = FALSE)
-  colnames(out) <- janitor::make_clean_names(colnames(out))
+  # Squashes irrelevant 'New Names...' msg
+  suppressMessages(
+    out <- readr::read_tsv(raw, skip = n_skip, n_max = n_read,
+                           show_col_types = FALSE, skip_empty_rows = FALSE,
+                           name_repair = "unique")
+  )
 
   list(data = out, type = type, wavelengths = wavelengths)
 }
