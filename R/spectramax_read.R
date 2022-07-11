@@ -23,14 +23,31 @@
 read_spectramax <- function(path, date = Sys.Date(), experiment_type = c("pq", "mtt")) {
 
   experiment_type <- rlang::arg_match(experiment_type)
-
   # For those doing the 'copy paste into excel' method
   if (fs::path_ext(path) == "xls" | fs::path_ext(path) == "xlsx") {
+    if (experiment_type == "mtt") {
+      wavelengths <- c(562, 660)
+    }
+    if (experiment_type == "pq") {
+      wavelengths <- c(562)
+    }
+
     x <- readxl::read_excel(path) |>
-      dplyr::select(-1) |>
-      rlang::set_names(NULL) |>
-      gp::as_gp()
-    x <- tibble::tibble(type = "plate", data = list(x))
+      dplyr::select(-1)
+    x <- x[stats::complete.cases(t(x))] # Remove empty cols
+    x <- x |>
+      dplyr::mutate(.row = 1:nrow(x)) |>
+      tidyr::pivot_longer(-.data$.row) |>
+      dplyr::mutate(.col = stringr::str_extract(.data$name, "^[[:digit:]]*"),
+                    .wavelength = stringr::str_extract(.data$name, "[^\\.]*$")) |>
+      dplyr::group_by(.row, .col) |>
+      dplyr::mutate(.wavelength = .data$.wavelength |> as.numeric() |> rank(),
+                    .wavelength = paste0("nm", wavelengths[.data$.wavelength])) |>
+      dplyr::select(-.data$name) |>
+      tidyr::pivot_wider(names_from = .data$.wavelength, values_from = .data$value) |>
+      readr::type_convert()
+    data <- gp::gp(rows = max(x$.row), cols = max(x$.col), data = x, tidy = TRUE)
+    out <- list(data = data, type = "Plate", wavelengths = wavelengths) |> list()
   }
 
   # For those exporting from the .exe itself

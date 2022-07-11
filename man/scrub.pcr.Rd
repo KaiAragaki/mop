@@ -4,12 +4,12 @@
 \alias{scrub.pcr}
 \title{Convert a pcr object into a tibble}
 \usage{
-\method{scrub}{pcr}(x, include_header_and_footer = FALSE, ...)
+\method{scrub}{pcr}(x, include_header = FALSE, ...)
 }
 \arguments{
 \item{x}{a \code{pcr} object}
 
-\item{include_header_and_footer}{Should the data from \code{x$header} and \code{x$footer} be included?}
+\item{include_header}{Should the data from \code{x$header} be included?}
 
 \item{...}{Unused}
 }

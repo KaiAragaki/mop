@@ -4,10 +4,12 @@
 \alias{scrub.spectramax}
 \title{Convert a spectramax object into a tibble}
 \usage{
-\method{scrub}{spectramax}(x, ...)
+\method{scrub}{spectramax}(x, n = 1, ...)
 }
 \arguments{
 \item{x}{a \code{spectramax} object}
+
+\item{n}{List item number to select data from}
 
 \item{...}{Unused}
 }
