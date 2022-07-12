@@ -8,7 +8,7 @@ new_spectramax(
   data = data.frame(),
   raw_data = raw(),
   date = lubridate::Date(),
-  experiment_type = character(),
+  wavelengths = numeric(),
   is_tidy = logical()
 )
 }
@@ -19,9 +19,9 @@ new_spectramax(
 
 \item{date}{\code{lubridate::Date} object}
 
-\item{experiment_type}{\code{character}, no restrictions on form}
-
 \item{is_tidy}{\code{logical}. Are the \code{data} provided tidy?}
+
+\item{experiment_type}{\code{character}, no restrictions on form}
 }
 \value{
 a \code{spectramax} object

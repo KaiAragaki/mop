@@ -9,14 +9,14 @@
 #' @return a `spectramax` object
 #' @export
 new_spectramax <- function(data = data.frame(), raw_data = raw(), date = lubridate::Date(),
-                           experiment_type = character(), is_tidy = logical()) {
+                           wavelengths = numeric(), is_tidy = logical()) {
   stopifnot(is.list(data),
             is.raw(raw_data))
   vec_assert(date, lubridate::Date())
-  vec_assert(experiment_type, character())
+  vec_assert(wavelengths, numeric())
   vec_assert(is_tidy, logical())
   new_vctr(list(data = data, raw_data = raw_data, date = date,
-                experiment_type = experiment_type, is_tidy = is_tidy),
+                wavelengths = wavelengths, is_tidy = is_tidy),
            class = "spectramax")
 }
 
@@ -31,8 +31,8 @@ obj_print_data.spectramax <- function(x, ...) {
 
 #' @export
 obj_print_footer.spectramax <- function(x, ...) {
-  cat(crayon::silver("# Experiment type:"),
-      ifelse(!is.null(x$experiment_type), x$experiment_type, "NULL"),
+  cat(crayon::silver("# Wavelengths:"),
+      ifelse(!is.null(x$wavelengths), x$wavelengths, "NULL"),
       "\n")
 
   cat(crayon::silver("# Is tidy:"),

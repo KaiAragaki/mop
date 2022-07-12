@@ -2,8 +2,7 @@
 #'
 #' @param path Path to the SPECTRAmax .txt file
 #' @param date Date of experiment. If not supplied, uses current date.
-#' @param experiment_type What kind of experiment? Either 'pq' for protein
-#'   quantification, or mtt
+#' @param wavelengths What wavelengths were read in this experiment?
 #'
 #' @details SPECTRAmax files cannot be read in easily without tidying them
 #'   simultaneously, due to their non-rectangular structure. Therefore, tidying
@@ -19,42 +18,41 @@
 #' @export
 #' @example
 #' system.file("extdata", "spectramax.txt", package = "mop") |> read_spectramax()
-read_spectramax <- function(path, date = Sys.Date(), experiment_type = c("pq", "mtt")) {
+read_spectramax <- function(path, date = Sys.Date(), wavelengths = NULL) {
   rlang::inform("Please wait. This will take ~10 seconds.")
   ext <- fs::path_ext(path)
-  experiment_type <- rlang::arg_match(experiment_type)
   raw <- readr::read_file_raw(path)
 
   if (ext == "txt") {
-    # For those exporting from the .exe itself
-    out <- read_spectramax_txt(raw)
+    out <- read_spectramax_txt(raw) # For those exporting from the .exe itself
+    if (!is.null(wavelengths)) {
+      wavelengths <- wavelengths
+    } else {
+      wavelengths <- lapply(out, \(x) x$wavelengths) |> unlist() |> unique()
+    }
   } else if (ext %in% c("xls", "xlsx")) {
-    # For those doing the 'copy paste into excel' method
-    out <- read_spectramax_excel(path, experiment_type)
+    out <- read_spectramax_excel(path, wavelengths) # For 'copy paste into excel' method
   } else {
     rlang::abort("Unknown file extension")
   }
+
+
 
   new_spectramax(
     data = out,
     raw_data = raw,
     date = Sys.Date(),
-    experiment_type = experiment_type,
+    wavelengths = as.numeric(wavelengths),
     is_tidy = TRUE
   )
 }
 
-read_spectramax_excel <- function(path, experiment_type) {
-  if (experiment_type == "mtt") {
-    wavelengths <- c(562, 660)
-  }
-  if (experiment_type == "pq") {
-    wavelengths <- c(562)
-  }
+read_spectramax_excel <- function(path, wavelengths) {
 
   x <- readxl::read_excel(path) |>
     dplyr::select(-1)
   x <- x[stats::complete.cases(t(x))] # Remove empty cols
+
   x <- x |>
     dplyr::mutate(.row = 1:nrow(x)) |>
     tidyr::pivot_longer(-.data$.row) |>
@@ -67,7 +65,7 @@ read_spectramax_excel <- function(path, experiment_type) {
     tidyr::pivot_wider(names_from = .data$.wavelength, values_from = .data$value) |>
     readr::type_convert()
   data <- gp::gp(rows = max(x$.row), cols = max(x$.col), data = x, tidy = TRUE)
-  out <- list(data = data, type = "Plate", wavelengths = wavelengths) |> list()
+  list(data = data, type = "Plate", wavelengths = wavelengths) |> list()
 }
 
 read_spectramax_txt <- function(raw) {
@@ -93,6 +91,29 @@ read_spectramax_txt <- function(raw) {
   out <- purrr::map2(x$skip, x$read_n,
                      ~read_section(raw, n_skip = .x, n_read = .y)) |>
     purrr::map(tidy_section)
+}
+
+read_section <- function(raw, n_skip, n_read) {
+  suppressMessages(
+    header <- readr::read_tsv(raw, skip = n_skip - 1 , n_max = 1,
+                              show_col_types = FALSE, skip_empty_rows = FALSE,
+                              col_names = FALSE, name_repair = "unique", guess_max = 10)
+  )
+
+  type <- header$X1 |> stringr::str_remove(":$")
+  if (type != "Group") {
+    wavelengths <- header$X16 |> stringr::str_split(" ") |> unlist()
+  } else {
+    wavelengths <- NULL
+  }
+  # Squashes irrelevant 'New Names...' msg
+  suppressMessages(
+    out <- readr::read_tsv(raw, skip = n_skip, n_max = n_read,
+                           show_col_types = FALSE, skip_empty_rows = FALSE,
+                           name_repair = "unique", guess_max = 10)
+  )
+
+  list(data = out, type = type, wavelengths = wavelengths)
 }
 
 tidy_section <- function(section) {
@@ -122,23 +143,4 @@ tidy_section <- function(section) {
   }
 
   list(data = data, type = section$type, wavelengths = section$wavelengths)
-}
-
-read_section <- function(raw, n_skip, n_read) {
-  suppressMessages(
-    header <- readr::read_tsv(raw, skip = n_skip - 1 , n_max = 1,
-                              show_col_types = FALSE, skip_empty_rows = FALSE,
-                              col_names = FALSE, name_repair = "unique", guess_max = 10)
-  )
-
-  type <- header$X1 |> stringr::str_remove(":$")
-  wavelengths <- header$X16 |> stringr::str_split(" ") |> unlist()
-  # Squashes irrelevant 'New Names...' msg
-  suppressMessages(
-    out <- readr::read_tsv(raw, skip = n_skip, n_max = n_read,
-                           show_col_types = FALSE, skip_empty_rows = FALSE,
-                           name_repair = "unique", guess_max = 10)
-  )
-
-  list(data = out, type = type, wavelengths = wavelengths)
 }

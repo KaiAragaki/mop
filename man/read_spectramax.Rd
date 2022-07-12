@@ -4,15 +4,14 @@
 \alias{read_spectramax}
 \title{Read and tidy a SPECTRAmax file}
 \usage{
-read_spectramax(path, date = Sys.Date(), experiment_type = c("pq", "mtt"))
+read_spectramax(path, date = Sys.Date(), wavelengths = NULL)
 }
 \arguments{
 \item{path}{Path to the SPECTRAmax .txt file}
 
 \item{date}{Date of experiment. If not supplied, uses current date.}
 
-\item{experiment_type}{What kind of experiment? Either 'pq' for protein
-quantification, or mtt}
+\item{wavelengths}{What wavelengths were read in this experiment?}
 }
 \value{
 A list, with the following form: \describe{
