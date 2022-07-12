@@ -42,7 +42,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_spectramax</span><span class="op">(</span><span class="va">path</span>, date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, experiment_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pq"</span>, <span class="st">"mtt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_spectramax</span><span class="op">(</span><span class="va">path</span>, date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.Date</a></span><span class="op">(</span><span class="op">)</span>, wavelengths <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -55,9 +55,8 @@
 <dd><p>Date of experiment. If not supplied, uses current date.</p></dd>
 
 
-<dt>experiment_type</dt>
-<dd><p>What kind of experiment? Either 'pq' for protein
-quantification, or mtt</p></dd>
+<dt>wavelengths</dt>
+<dd><p>What wavelengths were read in this experiment?</p></dd>
 
 </dl></div>
     <div class="section level2">
