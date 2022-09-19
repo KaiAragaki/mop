@@ -45,3 +45,43 @@ obj_print_footer.spectramax <- function(x, ...) {
       ifelse(!is.null(x$date), as.character(x$date), "NULL"),
       "\n")
 }
+
+
+#' Get or set an object's plate data
+#'
+#' @param x Object to extract plate data from
+#' @param ... Arguments to be passed to their respective methods
+#'
+#' @return A `gp` object
+#' @export
+plate_data <- function(x, ...) {
+  UseMethod("plate_data")
+}
+
+#' @rdname plate_data
+#' @export
+plate_data.spectramax <- function(x, ...) {
+  stopifnot(x$data[[1]]$type == "Plate")
+  x$data[[1]]$data
+}
+
+#' @param value Value to set the plate to.
+#' @rdname plate_data
+#' @export
+'plate_data<-' <- function(x, value) {
+  UseMethod("plate_data<-", x)
+}
+
+#' @rdname plate_data
+#' @export
+'plate_data<-.spectramax' <- function(x, value) {
+  x$data[[1]]$data <- value
+  x
+}
+
+#' @export
+gp_sec.spectramax <- function(x, ...) {
+  pd <- plate_data(x)
+  plate_data(x) <- gp_sec(pd, ...)
+  x
+}
