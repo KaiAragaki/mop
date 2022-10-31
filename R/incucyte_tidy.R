@@ -1,0 +1,99 @@
+#' Tidy an incucyte object
+#'
+#' @param x An `incucyte` object to tidy
+#'
+#' @param force_tidy `logical`. Should the tidying take place, even if the
+#'   `is_tidy` attribute is `TRUE`?
+#' @param ... Unused
+#'
+#' @return a `nanodrop` object
+#'
+#' @details This function:
+#'
+#'   * renames columns to sensible substitutes
+#'
+#'   * converts date-times to ISO 8601-esque date-time format (YYYY-MM-DD
+#'   HH:MM:SS vs YYYY-MM-DDTHH:MM:SSZ)
+#'
+#'   It's recommended that you do any manipulations to these data after you
+#'   tidy, rather than before, as `tidy_nanodrop` expects the output to be
+#'   fairly similar to the output from `read_nanodrop`.
+#'
+#'   A tidy `nanodrop` object will (usually) contain the following columns:
+#'
+#'   * `date` The date-time of sample reading, as YYYY-MM-DD HH:MM:SS
+#'
+#'   * `sample_name` The name of the sample provided by the NanoDrop itself
+#'
+#'   * `conc` The concentration of nucleic acid in ng/uL
+#'
+#'   * `a260_280` The absorbance at 260nm / absorbance at 280nm. Typically a
+#'   marker of protein contamination. Pure nucleic acid is typically around 2.
+#'
+#'   * `a260_230` The absorbance at 260nm / absorbance at 230nm. Typically a
+#'   marker of guanadine salt contamination. Pure nucleic acid is typically
+#'   around 2.
+#'
+#'   * `a260` The absorbance at 260nm, the wavelength nucleic acids absorb most
+#'   strongly.
+#'
+#'   * `a280` The absorbance at 280nm, the wavelength proteins absorb most
+#'   strongly.
+#'
+#'   The remaining columns are typically unused.
+#'
+#' @importFrom rlang .data
+#' @export
+tidy_lab.nanodrop <- function(x, force_tidy = FALSE, ...) {
+
+  if (x$is_tidy && !force_tidy) {
+    message("nanodrop already looks tidy, skipping. To tidy anyway, set force_tidy = TRUE.")
+    return(x)
+  }
+
+  data <- x$data |>
+    dplyr::rename_with(dplyr::recode,
+                       Nucleic.Acid.ng.uL. = "conc",
+                       A260.A280 = "a260_280",
+                       A260.A230 = "a260_230"
+    ) |>
+    dplyr::rename_with(snakecase::to_snake_case) |>
+    dplyr::rename_with(stringr::str_replace, .cols = dplyr::everything(), "_u_l", "ul") |>
+    dplyr::rename_with(stringr::str_replace, .cols = dplyr::everything(), "a_260", "a260") |>
+    dplyr::rename_with(stringr::str_replace, .cols = dplyr::everything(), "a_280", "a280") |>
+    dplyr::mutate(date = lubridate::mdy_hms(.data$date) |> as.character())
+
+  new_nanodrop(data = data, raw_data = x$data, nucleotide = x$nucleotide, is_tidy = TRUE, date = x$date)
+}
+
+tidy_lab.incucyte_platemap <- function(x) {
+
+  flatten_xml <- function(x) {
+    if (length(xmlChildren(x)) == 0) structure(list(xmlAttrs(x)), .Names = xmlName(xmlParent(x)))
+    else Reduce(append, lapply(xmlChildren(x), flatten_xml))
+  }
+
+  dfs <- lapply(getNodeSet(xml,"//wellItem"), function(x) data.frame(flatten_xml(x)))
+
+  xml <- x |>
+    XML::xmlParse()
+
+  out <- data.frame(
+    row = xpathSApply(xml, "//well", xmlGetAttr, "row"),
+    col = xpathSApply(xml, "//well", xmlGetAttr, "col"),
+  )
+
+  wells <- xml$plateMap$wellStore$wells
+
+  get_ref_item <- function(well_data) {
+    well_data$items$wellItem$referenceItem |>
+      attributes() |>
+      as.data.frame()
+  }
+
+  get_well_item <- function(well_)
+
+  get_
+
+  ref_items <- lapply(wells, get_ref_item)
+}
