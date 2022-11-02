@@ -65,46 +65,10 @@ new_incucyte <- function(data = data.frame(), raw_data = data.frame(), date = lu
 #'
 #' If there are additional columns provided, they will be silently dropped.
 #'
-#' @return a `nanodrop` object
+#' @return an `incucyte` object
 #' @export
-#'
-#' @examples
-#'
-#' # Example A: colnames allowed when is_tidy = FALSE
-#' a <- system.file("extdata", "nanodrop.csv", package = "mop") |>
-#' read_nanodrop()
-#'
-#' colnames(a$data)
-#'
-#' # Technically, these are the names that are checked for after the given names
-#' # have alphanumerics removed and are converted to lowercase:
-#'
-#' colnames(a$data) |> stringr::str_remove_all("[^[:alnum:]]") |> tolower()
-#'
-#'
-#' # Example B: colnames allowed when is_tidy = TRUE
-#' b <- a |> tidy_lab()
-#'
-#' colnames(b$data)
-#'
-nanodrop <- function(data,
-                     date = NULL,
-                     nucleotide = c("RNA", "DNA", "dsDNA", "dsRNA"),
-                     is_tidy = FALSE) {
 
-  stopifnot(is.logical(is_tidy))
-
-  if (missing(nucleotide) | is.null(nucleotide)) {
-    nucleotide <- character(length = 1L)
-  } else {
-    nucleotide <- rlang::arg_match(nucleotide)
-  }
-
-  if (missing(date) | is.null(date)) {
-    date <- lubridate::Date(length = 1L)
-  } else {
-    date <- lubridate::as_date(date)
-  }
+incucyte <- function(data, platemap) {
 
   data <- dplyr::as_tibble(data)
 

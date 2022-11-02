@@ -6,45 +6,13 @@
 #'   `is_tidy` attribute is `TRUE`?
 #' @param ... Unused
 #'
-#' @return a `nanodrop` object
+#' @return an `incucyte` object
 #'
 #' @details This function:
 #'
-#'   * renames columns to sensible substitutes
-#'
-#'   * converts date-times to ISO 8601-esque date-time format (YYYY-MM-DD
-#'   HH:MM:SS vs YYYY-MM-DDTHH:MM:SSZ)
-#'
-#'   It's recommended that you do any manipulations to these data after you
-#'   tidy, rather than before, as `tidy_nanodrop` expects the output to be
-#'   fairly similar to the output from `read_nanodrop`.
-#'
-#'   A tidy `nanodrop` object will (usually) contain the following columns:
-#'
-#'   * `date` The date-time of sample reading, as YYYY-MM-DD HH:MM:SS
-#'
-#'   * `sample_name` The name of the sample provided by the NanoDrop itself
-#'
-#'   * `conc` The concentration of nucleic acid in ng/uL
-#'
-#'   * `a260_280` The absorbance at 260nm / absorbance at 280nm. Typically a
-#'   marker of protein contamination. Pure nucleic acid is typically around 2.
-#'
-#'   * `a260_230` The absorbance at 260nm / absorbance at 230nm. Typically a
-#'   marker of guanadine salt contamination. Pure nucleic acid is typically
-#'   around 2.
-#'
-#'   * `a260` The absorbance at 260nm, the wavelength nucleic acids absorb most
-#'   strongly.
-#'
-#'   * `a280` The absorbance at 280nm, the wavelength proteins absorb most
-#'   strongly.
-#'
-#'   The remaining columns are typically unused.
-#'
 #' @importFrom rlang .data
 #' @export
-tidy_lab.nanodrop <- function(x, force_tidy = FALSE, ...) {
+tidy_lab.incucyte_data <- function(x, force_tidy = FALSE, ...) {
 
   if (x$is_tidy && !force_tidy) {
     message("nanodrop already looks tidy, skipping. To tidy anyway, set force_tidy = TRUE.")
@@ -67,33 +35,48 @@ tidy_lab.nanodrop <- function(x, force_tidy = FALSE, ...) {
 }
 
 tidy_lab.incucyte_platemap <- function(x) {
+  xml <- XML::xmlParse(x)
+  row <- XML::xpathSApply(x, "//well", xmlGetAttr, "row")
+  col <- XML::xpathSApply(x, "//well", xmlGetAttr, "col")
+  wells <- dplyr::tibble(row, col)
 
-  flatten_xml <- function(x) {
-    if (length(xmlChildren(x)) == 0) structure(list(xmlAttrs(x)), .Names = xmlName(xmlParent(x)))
-    else Reduce(append, lapply(xmlChildren(x), flatten_xml))
-  }
+  out <- purrr::map2(row, col, tidy_well, xml = xml) |>
+    dplyr::bind_rows()
+}
 
-  dfs <- lapply(getNodeSet(xml,"//wellItem"), function(x) data.frame(flatten_xml(x)))
+tidy_well <- function(xml, row, col) {
+  q <- paste0("//well[@row='", row, "' and @col='", col, "']/items/wellItem")
+  q_res <- XML::xpathSApply(xml, q, tidy_attrs, simplify = F)
+  r <- paste0(q, "/referenceItem")
+  r_res <- XML::xpathSApply(xml, r, tidy_attrs, simplify = F)
 
-  xml <- x |>
-    XML::xmlParse()
+  mapply(rbind, q_res, r_res, SIMPLIFY = F) |>
+    lapply(tidy_df) |>
+    dplyr::bind_rows() |>
+    dplyr::mutate(.row = as.numeric(row) + 1, .col = as.numeric(col) + 1) |>
+    dplyr::relocate(.row, .col) |>
+    dplyr::group_by(.row, .col) |>
+    tidyr::fill(dplyr::everything(), .direction = "downup") |>
+    dplyr::distinct() |>
+    dplyr::ungroup()
+}
 
-  out <- data.frame(
-    row = xpathSApply(xml, "//well", xmlGetAttr, "row"),
-    col = xpathSApply(xml, "//well", xmlGetAttr, "col"),
-  )
+tidy_attrs <- function(x) {
+  x |>
+    XML::xmlAttrs() |>
+    dplyr::as_tibble(rownames = "desc")
+}
 
-  wells <- xml$plateMap$wellStore$wells
+tidy_df <- function(x) {
+  filtered_x <- x |>
+    dplyr::distinct() |>
+    dplyr::filter(desc != "colorArgb") # Color doesn't mean much here
 
-  get_ref_item <- function(well_data) {
-    well_data$items$wellItem$referenceItem |>
-      attributes() |>
-      as.data.frame()
-  }
+  name <- filtered_x[which(filtered_x$desc == "type"), 2][[1]] |>
+    stringr::str_replace_all(" ", "_")
 
-  get_well_item <- function(well_)
-
-  get_
-
-  ref_items <- lapply(wells, get_ref_item)
+  filtered_x |>
+    dplyr::filter(desc != "type") |>
+    dplyr::mutate(desc = paste0(name, "_", desc)) |>
+    tidyr::pivot_wider(names_from = desc, values_from = value)
 }
