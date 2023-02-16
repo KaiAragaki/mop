@@ -1,3 +1,3 @@
-#' @importFrom gp gp_sec
+#' @importFrom gplate gp_sec
 #' @export
-gp::gp_sec
+gplate::gp_sec

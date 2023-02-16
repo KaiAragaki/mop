@@ -11,6 +11,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{gp}{\code{\link[gp]{gp_sec}}}
+  \item{gplate}{\code{\link[gplate]{gp_sec}}}
 }}
 

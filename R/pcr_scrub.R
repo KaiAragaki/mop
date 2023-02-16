@@ -12,7 +12,7 @@ scrub.pcr <- function(x, include_header = FALSE, ...) {
     x <- tidy_lab(x)
   }
   data <- x$data
-  tidy <- gp::gp_serve(data)
+  tidy <- gplate::gp_serve(data)
 
   # Add footer ----
   footer <- x$footer |> t() |> tibble::as_tibble()

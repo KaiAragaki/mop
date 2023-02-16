@@ -83,11 +83,11 @@ tidy_lab.pcr <- function(x, usr_standards = NULL, pad_zero = FALSE, ...) {
   }
 
   if (x$wells == 384) {
-    x$data <- gp::gp_unserve(x$data, nrow = 16, ncol = 24)
+    x$data <- gplate::gp_unserve(x$data, nrow = 16, ncol = 24)
   } else if (x$wells == 96) {
-    x$data <- gp::gp_unserve(x$data, nrow = 8, ncol = 12)
+    x$data <- gplate::gp_unserve(x$data, nrow = 8, ncol = 12)
   } else {
-    x$data <- gp::gp_unserve(x$data)
+    x$data <- gplate::gp_unserve(x$data)
   }
 
   x$is_tidy <- TRUE

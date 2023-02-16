@@ -70,8 +70,6 @@ new_incucyte <- function(data = data.frame(), raw_data = data.frame(), date = lu
 
 incucyte <- function(data, platemap) {
 
-  data <- dplyr::as_tibble(data)
-
   raw_data <- dplyr::tibble()
   if (!is_tidy) {
     raw_data <- data

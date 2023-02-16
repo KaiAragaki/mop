@@ -65,7 +65,7 @@ obj_print_footer.pcr <- function(x, ...) {
 #' @return A `pcr` object
 #' @export
 as_pcr <- function(x) {
-  plate_dims <- gp::plate_formats[which(gp::plate_formats[1] == x$wells[1]), -1]
+  plate_dims <- gplate::plate_formats[which(gp::plate_formats[1] == x$wells[1]), -1]
 
   footer_names <- c("analysis_type", "endogenous_control", "rq_min_max_confidence_level", "reference_sample")
   header_names <- c("block_type", "calibration_background_is_expired",
@@ -92,7 +92,7 @@ as_pcr <- function(x) {
   footer <- dplyr::select(x, dplyr::any_of(footer_names)) |> dplyr::slice(1) |> t() |> tibble::as_tibble(rownames = "name", .name_repair = "minimal") |> tibble::deframe()
   header <- dplyr::select(x, dplyr::any_of(header_names)) |> dplyr::slice(1) |> t() |> tibble::as_tibble(rownames = "name", .name_repair = "minimal") |> tibble::deframe()
 
-  new_pcr(data = gp::gp_unserve(data, nrow = plate_dims$rows, ncol = plate_dims$cols),
+  new_pcr(data = gplate::gp_unserve(data, nrow = plate_dims$rows, ncol = plate_dims$cols),
           date = lubridate::as_date(x$date[1]),
           wells = x$wells[1],
           experiment_type = x$experiment_type[1],

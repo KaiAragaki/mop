@@ -64,7 +64,7 @@ read_spectramax_excel <- function(path, wavelengths) {
     dplyr::select(-.data$name) |>
     tidyr::pivot_wider(names_from = .data$.wavelength, values_from = .data$value) |>
     readr::type_convert()
-  data <- gp::gp(rows = max(x$.row), cols = max(x$.col), data = x, tidy = TRUE)
+  data <- gplate::gp(rows = max(x$.row), cols = max(x$.col), data = x, tidy = TRUE)
   list(data = data, type = "Plate", wavelengths = wavelengths) |> list()
 }
 
@@ -132,7 +132,7 @@ tidy_section <- function(section) {
       tidyr::pivot_wider(names_from = .data$.wavelength, values_from = .data$value)
 
     suppressMessages(data <- readr::type_convert(data))
-    data <- gp::gp(rows = max(data$.row), cols = max(data$.col), data = data, tidy = TRUE)
+    data <- gplate::gp(rows = max(data$.row), cols = max(data$.col), data = data, tidy = TRUE)
   }
 
   if (section$type == "Group") {

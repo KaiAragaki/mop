@@ -9,7 +9,7 @@
 scrub.spectramax <- function(x, n = 1, ...) {
   if (x$data[[n]]$type == "Plate") {
     x$data[[n]]$data |>
-      gp::gp_serve() |>
+      gplate::gp_serve() |>
       dplyr::mutate(exp_date = x$date, exp_type = x$experiment_type, is_tidy = x$is_tidy)
   } else {
     x$data[[n]]$data |>
