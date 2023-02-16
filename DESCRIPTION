@@ -15,7 +15,7 @@ Imports:
     crayon,
     dplyr,
     fs,
-    gp,
+    gplate,
     janitor,
     lubridate,
     purrr,
@@ -29,6 +29,6 @@ Imports:
     utils,
     vctrs
 Remotes:
-    KaiAragaki/gp,
+    KaiAragaki/gplate,
     KaiAragaki/amplify
 URL: https://kaiaragaki.github.io/mop/
