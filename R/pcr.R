@@ -65,7 +65,7 @@ obj_print_footer.pcr <- function(x, ...) {
 #' @return A `pcr` object
 #' @export
 as_pcr <- function(x) {
-  plate_dims <- gplate::plate_formats[which(gp::plate_formats[1] == x$wells[1]), -1]
+  plate_dims <- gplate::plate_formats[which(gplate::plate_formats[1] == x$wells[1]), -1]
 
   footer_names <- c("analysis_type", "endogenous_control", "rq_min_max_confidence_level", "reference_sample")
   header_names <- c("block_type", "calibration_background_is_expired",
