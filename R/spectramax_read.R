@@ -71,7 +71,7 @@ read_spectramax_excel <- function(path, wavelengths) {
 read_spectramax_txt <- function(raw) {
   lines <- raw |>
     readr::read_file() |>
-    strsplit("\r\n") |>
+    strsplit("\r\n", useBytes = TRUE) |>
     unlist()
 
   block_start <- c(1, which(lines == "~End"))
