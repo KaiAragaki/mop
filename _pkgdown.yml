@@ -1,23 +1,4 @@
 url: https://kaiaragaki.github.io/mop/
 template:
   bootstrap: 5
-reference:
-- title: Generics
-  contents:
-  - tidy_lab
-  - scrub
-- title: Readers
-  contents: matches("read")
-- title: Tidiers
-  contents: matches("tidy")
-- title: Scrubbers
-  contents: matches("scrub")
-- title: Nanodrop
-  contents: matches("nanodrop")
-- title: PCR
-  contents: matches("pcr")
-- title: Spectramax
-  contents: matches("spectramax")
-- title: Utilities
-  contents: starts_with("pad_zero")
 
