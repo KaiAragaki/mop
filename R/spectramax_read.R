@@ -44,7 +44,7 @@ read_spectramax <- function(path, date = Sys.Date(), wavelengths = NULL) {
   new_spectramax(
     data = out,
     raw_data = raw,
-    date = Sys.Date(),
+    date = date,
     wavelengths = as.numeric(wavelengths),
     is_tidy = TRUE
   )
