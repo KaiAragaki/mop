@@ -86,7 +86,7 @@ read_spectramax_txt <- function(raw) {
   # The first blank line in a given section denotes the end of 'useful'
   # information (the rest tends to be footnotes). Unfortunately, that is not the
   # ONLY blank line in a section.
-  blank_lines <- c(which(grepl("^\t*$", lines)))
+  blank_lines <- c(which(grepl("^\t*$", lines, useBytes = TRUE)))
   both <- c(block_start, blank_lines)
   both <- both[order(both)]
   # Get the next greatest hit in 'both' after a block_start
