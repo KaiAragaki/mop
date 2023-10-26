@@ -9,15 +9,19 @@
 #'   is _required_ to be read in and is not an option supplied.
 #'
 #' @return A list, with the following form: \describe{
-#' \item{data}{a `tibble` that contains two columns - the `type`, and the (tidy) `data` itself in a list-column.}
+#' \item{data}{a `tibble` that contains two columns - the `type`, and the (tidy)
+#'   `data` itself in a list-column.}
 #' \item{raw_data}{a `raw` representation of the file, before tidying}
 #' \item{date}{character. The date of the experiment}
-#' \item{experiment_type}{character. The type of experiment (currently only pq (Protein Quantification) and mtt supported)}
-#' \item{tidy}{logical. Should always return TRUE if read in using `read_spectramax`}
+#' \item{experiment_type}{character. The type of experiment (currently only pq
+#'   (Protein Quantification) and mtt supported)}
+#' \item{tidy}{logical. Should always return TRUE if read in using `read_
+#'   spectramax`}
 #' }
 #' @export
 #' @example
-#' system.file("extdata", "spectramax.txt", package = "mop") |> read_spectramax()
+#' system.file("extdata", "spectramax.txt", package = "mop") |>
+#'   read_spectramax()
 read_spectramax <- function(path, date = Sys.Date(), wavelengths = NULL) {
   rlang::inform("Please wait. This will take ~10 seconds.")
   ext <- fs::path_ext(path)
@@ -31,12 +35,11 @@ read_spectramax <- function(path, date = Sys.Date(), wavelengths = NULL) {
       wavelengths <- lapply(out, \(x) x$wavelengths) |> unlist() |> unique()
     }
   } else if (ext %in% c("xls", "xlsx")) {
-    out <- read_spectramax_excel(path, wavelengths) # For 'copy paste into excel' method
+    # For 'copy paste into excel' method
+    out <- read_spectramax_excel(path, wavelengths)
   } else {
     rlang::abort("Unknown file extension")
   }
-
-
 
   new_spectramax(
     data = out,
@@ -48,7 +51,6 @@ read_spectramax <- function(path, date = Sys.Date(), wavelengths = NULL) {
 }
 
 read_spectramax_excel <- function(path, wavelengths) {
-
   x <- readxl::read_excel(path) |>
     dplyr::select(-1)
   x <- x[stats::complete.cases(t(x))] # Remove empty cols
@@ -59,12 +61,18 @@ read_spectramax_excel <- function(path, wavelengths) {
     dplyr::mutate(.col = stringr::str_extract(.data$name, "^[[:digit:]]*"),
                   .wavelength = stringr::str_extract(.data$name, "[^\\.]*$")) |>
     dplyr::group_by(.row, .col) |>
-    dplyr::mutate(.wavelength = .data$.wavelength |> as.numeric() |> rank(),
-                  .wavelength = paste0("nm", wavelengths[.data$.wavelength])) |>
+    dplyr::mutate(
+      .wavelength = .data$.wavelength |> as.numeric() |> rank(),
+      .wavelength = paste0("nm", wavelengths[.data$.wavelength])
+    ) |>
     dplyr::select(-.data$name) |>
-    tidyr::pivot_wider(names_from = .data$.wavelength, values_from = .data$value) |>
+    tidyr::pivot_wider(
+      names_from = .data$.wavelength, values_from = .data$value
+    ) |>
     readr::type_convert()
-  data <- gplate::gp(rows = max(x$.row), cols = max(x$.col), data = x, tidy = TRUE)
+  data <- gplate::gp(
+    rows = max(x$.row), cols = max(x$.col), data = x, tidy = TRUE
+  )
   list(data = data, type = "Plate", wavelengths = wavelengths) |> list()
 }
 
@@ -95,9 +103,11 @@ read_spectramax_txt <- function(raw) {
 
 read_section <- function(raw, n_skip, n_read) {
   suppressMessages(
-    header <- readr::read_tsv(raw, skip = n_skip - 1 , n_max = 1,
-                              show_col_types = FALSE, skip_empty_rows = FALSE,
-                              col_names = FALSE, name_repair = "unique", guess_max = 10)
+    header <- readr::read_tsv(
+      raw, skip = n_skip - 1, n_max = 1,
+      show_col_types = FALSE, skip_empty_rows = FALSE,
+      col_names = FALSE, name_repair = "unique", guess_max = 10
+    )
   )
 
   type <- header$X1 |> stringr::str_remove(":$")
@@ -118,27 +128,37 @@ read_section <- function(raw, n_skip, n_read) {
 
 tidy_section <- function(section) {
   if (section$type == "Plate") {
-    data <- section$data[,-(1:2)]
+    data <- section$data[, -(1:2)]
     data <- data[stats::complete.cases(t(data))] # Remove hanging 'empty' cols
     data <- data |>
       dplyr::mutate(.row = 1:nrow(data)) |>
       tidyr::pivot_longer(-.data$.row) |>
-      dplyr::mutate(.col = stringr::str_extract(.data$name, "^[[:digit:]]*"),
-                    .wavelength = stringr::str_extract(.data$name, "[^\\.]*$")) |>
+      dplyr::mutate(
+        .col = stringr::str_extract(.data$name, "^[[:digit:]]*"),
+        .wavelength = stringr::str_extract(.data$name, "[^\\.]*$"
+        )) |>
       dplyr::group_by(.row, .col) |>
-      dplyr::mutate(.wavelength = .data$.wavelength |> as.numeric() |> rank(),
-                    .wavelength = paste0("nm", section$wavelengths[.data$.wavelength])) |>
+      dplyr::mutate(
+        .wavelength = .data$.wavelength |> as.numeric() |> rank(),
+        .wavelength = paste0("nm", section$wavelengths[.data$.wavelength])
+      ) |>
       dplyr::select(-.data$name) |>
-      tidyr::pivot_wider(names_from = .data$.wavelength, values_from = .data$value)
+      tidyr::pivot_wider(
+        names_from = .data$.wavelength, values_from = .data$value
+      )
 
     suppressMessages(data <- readr::type_convert(data))
-    data <- gplate::gp(rows = max(data$.row), cols = max(data$.col), data = data, tidy = TRUE)
+    data <- gplate::gp(
+      rows = max(data$.row), cols = max(data$.col), data = data, tidy = TRUE
+    )
   }
 
   if (section$type == "Group") {
-    names <- intersect(c("sample", "result", "mean_result", "std_dev",
-                         "cv_percent", "concentration", "mean_value"),
-                       colnames(section$data))
+    names <- intersect(
+      c("sample", "result", "mean_result", "std_dev",
+        "cv_percent", "concentration", "mean_value"),
+      colnames(section$data)
+    )
     data <- tidyr::fill(section$data, names)
   }
 
