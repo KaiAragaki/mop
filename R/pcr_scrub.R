@@ -17,12 +17,12 @@ scrub.pcr <- function(x, include_header = FALSE, ...) {
   # Add footer ----
   footer <- x$footer |> t() |> tibble::as_tibble()
   colnames(footer) <- janitor::make_clean_names(colnames(footer))
-  tidy <- cbind(tidy, footer)
+  tidy <- dplyr::bind_cols(tidy, footer)
 
   if (include_header) {
     header <- x$header |> t() |> tibble::as_tibble()
     colnames(header) <- janitor::make_clean_names(colnames(header))
-    tidy <- cbind(tidy, header)
+    tidy <- dplyr::bind_cols(tidy, header)
   }
 
   tidy |>
