@@ -11,7 +11,6 @@
 #' @return A list, with the following form: \describe{
 #' \item{data}{a `tibble` that contains two columns - the `type`, and the (tidy)
 #'   `data` itself in a list-column.}
-#' \item{raw_data}{a `raw` representation of the file, before tidying}
 #' \item{date}{character. The date of the experiment}
 #' \item{experiment_type}{character. The type of experiment (currently only pq
 #'   (Protein Quantification) and mtt supported)}
@@ -42,7 +41,6 @@ read_spectramax <- function(path, date = Sys.Date(), wavelengths = NULL) {
 
   new_spectramax(
     data = out,
-    raw_data = raw,
     date = date,
     wavelengths = as.numeric(wavelengths),
     is_tidy = TRUE

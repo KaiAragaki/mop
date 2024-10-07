@@ -10,12 +10,11 @@
 #' @export
 new_spectramax <- function(data = data.frame(), raw_data = raw(), date = lubridate::Date(),
                            wavelengths = numeric(), is_tidy = logical()) {
-  stopifnot(is.list(data),
-            is.raw(raw_data))
+  stopifnot(is.list(data))
   vec_assert(date, lubridate::Date())
   vec_assert(wavelengths, numeric())
   vec_assert(is_tidy, logical())
-  new_vctr(list(data = data, raw_data = raw_data, date = date,
+  new_vctr(list(data = data, date = date,
                 wavelengths = wavelengths, is_tidy = is_tidy),
            class = "spectramax")
 }
