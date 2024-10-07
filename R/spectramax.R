@@ -31,16 +31,6 @@ obj_print_data.spectramax <- function(x, ...) {
 
 #' @export
 obj_print_footer.spectramax <- function(x, ...) {
-  cat(crayon::silver("# Wavelengths:"),
-      ifelse(!is.null(x$wavelengths), x$wavelengths, "NULL"),
-      "\n")
-
-  cat(crayon::silver("# Is tidy:"),
-      dplyr::case_when(is.null(x$is_tidy) ~ crayon::silver("NULL"),
-                       x$is_tidy == TRUE ~ crayon::blue(x$is_tidy),
-                       x$is_tidy == FALSE ~ crayon::red(x$is_tidy)),
-      "\n")
-
   cat(crayon::silver("# Date:"),
       ifelse(!is.null(x$date), as.character(x$date), "NULL"),
       "\n")
