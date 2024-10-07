@@ -23,7 +23,6 @@
 #' system.file("extdata", "spectramax.txt", package = "mop") |>
 #'   read_spectramax()
 read_spectramax <- function(path, date = Sys.Date(), wavelengths = NULL) {
-  rlang::inform("Please wait. This will take ~10 seconds.")
   ext <- fs::path_ext(path)
   raw <- readr::read_file_raw(path)
 
