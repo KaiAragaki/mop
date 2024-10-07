@@ -1,99 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/404.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/index.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/as_nanodrop.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/as_pcr.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/incucyte.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/is_incucyte.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/is_nanodrop.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/mop-package.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/nanodrop.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/new_incucyte.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/new_nanodrop.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/new_pcr.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/new_spectramax.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/pad_zero.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/plate_data.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/read_incucyte.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/read_nanodrop.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/read_pcr.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/read_spectramax.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/scrub.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/scrub.nanodrop.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/scrub.pcr.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/scrub.spectramax.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/tidy_lab.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/tidy_lab.incucyte_data.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/tidy_lab.nanodrop.html</loc>
-  </url>
-  <url>
-    <loc>https://kaiaragaki.github.io/mop/reference/tidy_lab.pcr.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://kaiaragaki.github.io/mop/404.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/LICENSE-text.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/LICENSE.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/authors.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/index.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/as_nanodrop.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/as_pcr.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/incucyte.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/index.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/is_incucyte.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/is_nanodrop.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/mop-package.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/nanodrop.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/new_incucyte.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/new_nanodrop.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/new_pcr.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/new_spectramax.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/pad_zero.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/plate_data.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/read_incucyte.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/read_nanodrop.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/read_pcr.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/read_spectramax.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/reexports.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/scrub.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/scrub.nanodrop.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/scrub.pcr.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/scrub.spectramax.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/tidy_lab.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/tidy_lab.incucyte_data.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/tidy_lab.nanodrop.html</loc></url>
+<url><loc>https://kaiaragaki.github.io/mop/reference/tidy_lab.pcr.html</loc></url>
 </urlset>
+
