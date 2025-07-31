@@ -2,7 +2,7 @@ Package: mop
 Title: A 'broom'-like Interface to Lab Data
 Version: 0.0.1
 Authors@R: 
-    person("Kai", "Aragaki", , "adamaragaki@gmail.com", role = c("aut", "cre"),
+    person("Kai", "Aragaki", , "kaiaragaki@proton.me", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-9458-0426"))
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
