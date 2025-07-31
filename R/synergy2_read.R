@@ -107,7 +107,9 @@ format_sections <- function(sections) {
   # Coalesce all matrices an well tables into comprehensive data.frames
   if (has_matrices) {
     matrix_indices <- which(section_types == "matrix")
-    matrix_data <- Reduce(dplyr::inner_join, formatted_sections[matrix_indices])
+    suppressMessages({
+      matrix_data <- Reduce(dplyr::inner_join, formatted_sections[matrix_indices])
+    })
     formatted_sections <- formatted_sections[-matrix_indices]
     formatted_sections$matrix_data <- matrix_data
     section_types <- section_types[-matrix_indices]
@@ -127,10 +129,11 @@ format_sections <- function(sections) {
     )
 
     if (length(well_table_indices) > 0) {
-      well_table_data <- Reduce(
-        dplyr::inner_join, formatted_sections[well_table_indices]
-      )
-
+      suppressMessages({
+        well_table_data <- Reduce(
+          dplyr::inner_join, formatted_sections[well_table_indices]
+        )
+      })
       formatted_sections <- formatted_sections[-well_table_indices]
       formatted_sections$well_table_data <- well_table_data
       section_types <- section_types[-well_table_indices]
@@ -158,10 +161,12 @@ format_sections <- function(sections) {
   )
 
   if (length(coaleced_indices) == 2) {
-    formatted_sections$data <- dplyr::full_join(
-      formatted_sections$matrix_data,
-      formatted_sections$well_table_data
-    )
+    suppressMessages({
+      formatted_sections$data <- dplyr::full_join(
+        formatted_sections$matrix_data,
+        formatted_sections$well_table_data
+      )
+    })
     formatted_sections <- formatted_sections[-coaleced_indices]
   } else if (length(coaleced_indices) == 1) {
     formatted_sections$data <- formatted_sections[[coaleced_indices]]
@@ -240,7 +245,9 @@ format_section_matrix <- function(sec) {
     out <- cbind(out, values)
   }
 
-  out <- readr::type_convert(out)
+  suppressMessages({
+    out <- readr::type_convert(out)
+  })
   out <- tibble::as_tibble(out)
 
   if ("Well ID" %in% colnames(out)) {
@@ -254,6 +261,14 @@ format_section_table <- function(sec) {
   out <- tryCatch(
     readr::read_tsv(I(sec), show_col_types = FALSE),
     # Small tables can fail to parse. This manually creates them.
+    warning = \(msg) {
+      splits <- stringr::str_split(sec, "\t")
+      names <- splits[[1]]
+      rest <- splits[-1]
+      df <- data.frame(matrix(ncol = length(names)))
+      names(df) <- names
+      Reduce(rbind, rest, init = df)[-1, ]
+    },
     error = \(msg) {
       splits <- stringr::str_split(sec, "\t")
       names <- splits[[1]]
