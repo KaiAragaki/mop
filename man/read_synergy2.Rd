@@ -4,7 +4,7 @@
 \alias{read_synergy2}
 \title{Read and tidy a Synergy2 file}
 \usage{
-read_synergy2(path, date = Sys.Date())
+read_synergy2(path)
 }
 \arguments{
 \item{path}{Path to the Synergy2 .txt file}

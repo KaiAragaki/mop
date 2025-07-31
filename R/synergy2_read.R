@@ -11,7 +11,7 @@
 #' @examples
 #' system.file("extdata", "bca-assay-all-export.txt", package = "mop") |>
 #'   read_synergy2()
-read_synergy2 <- function(path, date = Sys.Date()) {
+read_synergy2 <- function(path) {
   out <- read_synergy2_txt(path)
   wavelengths <- get_wavelengths(out)
   new_synergy2(
