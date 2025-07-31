@@ -14,11 +14,10 @@
 #' \item{date}{character. The date of the experiment}
 #' \item{experiment_type}{character. The type of experiment (currently only pq
 #'   (Protein Quantification) and mtt supported)}
-#' \item{tidy}{logical. Should always return TRUE if read in using `read_
-#'   spectramax`}
+#' \item{tidy}{logical. Should always return TRUE if read in using `read_spectramax`}
 #' }
 #' @export
-#' @example
+#' @examples
 #' system.file("extdata", "spectramax.txt", package = "mop") |>
 #'   read_spectramax()
 read_spectramax <- function(path, date = Sys.Date(), wavelengths = NULL) {
