@@ -66,49 +66,9 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"bca-assay-all-export.txt"</span>, package <span class="op">=</span> <span class="st">"mop"</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">read_synergy2</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> cols(</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   `Well ID` = <span style="color: #BB0000;">col_character()</span>,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   `Conc/Dil` = <span style="color: #00BB00;">col_double()</span>,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Name = <span style="color: #BBBB00;">col_logical()</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> cols(</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   `Well ID` = <span style="color: #BB0000;">col_character()</span>,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   `Conc/Dil` = <span style="color: #00BB00;">col_double()</span>,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Name = <span style="color: #BBBB00;">col_logical()</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> cols(</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   `562` = <span style="color: #00BB00;">col_double()</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> cols(</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   `Blank 562` = <span style="color: #00BB00;">col_double()</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Column specification</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> cols(</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Conc = <span style="color: #BB0000;">col_character()</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>unable to translate 'Curve Name	Curve Formula	A	B	R&lt;b2&gt;</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Curve	Y=A*X+B	0.00348	0.0143	0.993' to a wide string</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(.row, .col, WellID, `Conc/Dil`, Name)`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(.row, .col)`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(.row, .col)`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(.row, .col)`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(WellID, Name)`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(WellID, Name, .row, .col, `Conc/Dil`, `562`)`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(WellID, Name, .row, .col, `Conc/Dil`, Blank562)`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(.row, .col, WellID, `Conc/Dil`, Name, `562`,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Blank562, Conc)`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 96 × 8</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     .row  .col WellID `Conc/Dil` Name  `562` Blank562 Conc  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     .row  .col WellID `Conc/Dil` Name  nm562 Blank562 Conc  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>     1     1 BLK            <span style="color: #BB0000;">NA</span> <span style="color: #BB0000;">NA</span>    0.091    0.001 &lt;0.000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>     1     2 STD1            0 <span style="color: #BB0000;">NA</span>    0.092    0.002 &lt;0.000</span>
