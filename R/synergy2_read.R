@@ -250,6 +250,10 @@ format_section_matrix <- function(sec) {
   })
   out <- tibble::as_tibble(out)
 
+  # Some Well IDs are called things like SPL1:1 or something
+  #
+  # This information seems to be contained in other variables and prevents
+  # joining, so we trim off the colon and everything after
   if ("Well ID" %in% colnames(out)) {
     out$`Well ID` <- stringr::str_remove(out$`Well ID`, ":[:digit:]*$")
   }
