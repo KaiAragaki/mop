@@ -258,6 +258,8 @@ format_section_matrix <- function(sec) {
     out$`Well ID` <- stringr::str_remove(out$`Well ID`, ":[:digit:]*$")
   }
 
+  out <- prepend_nm_to_wavelength_colnames(out)
+
   out
 }
 
@@ -301,7 +303,22 @@ format_section_table <- function(sec) {
     out <- out[!(colnames(out) %in% calculated_cols)]
   }
 
+  out <- prepend_nm_to_wavelength_colnames(out)
+
   out
+}
+
+# Convert wavelength cols (562) to something more legal, column-name wise
+# (nm562)
+#
+# This also aligns it more to the output of spectramax tidying
+prepend_nm_to_wavelength_colnames <- function(x) {
+  wavelength_cols <- stringr::str_detect(colnames(x), "^[2-9][0-9]{2}$")
+  if (any(wavelength_cols)) {
+    new_names <- stringr::str_replace(colnames(x), "^([2-9][0-9]{2})$", "nm\\1")
+    colnames(x) <- new_names
+  }
+  x
 }
 
 format_section_dictionary <- function(sec) {
@@ -322,11 +339,12 @@ format_one_dictionary_entry <- function(entry) {
 # can be used to crossvalidate.
 #
 # The regex is fairly strict - should only match for columns named a number
-# between 200 and 999 (the range for the synergy2)
+# between 200 and 999 (the range for the synergy2) with "nm" prepended (which is
+# done at time of section formatting)
 get_wavelengths <- function(x) {
   x$data |>
     colnames() |>
-    stringr::str_extract("^[2-9]{1}[0-9]{2}$") |>
+    stringr::str_extract("(?<=^nm)[2-9]{1}[0-9]{2}$") |>
     na.omit() |>
     as.numeric()
 }
